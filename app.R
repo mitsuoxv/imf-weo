@@ -92,19 +92,25 @@ ui <- navbarPage("IMF World Economic Outlook, April 2019",
     tabPanel("By area",
     sidebarLayout(
         sidebarPanel(
-            selectInput("select_area", label = h3("Select area"), 
+            selectInput("select_area1", label = h4("Select area1"), 
                       choices = area_menu, selected = "158"),
           
+            selectInput("select_area2", label = h4("Select area2"), 
+                        choices = area_menu, selected = "111"),
+            
             hr(),
             
-            selectInput("select_concept", label = h3("Select concept"), 
+            selectInput("select_concept1", label = h4("Select concept1"), 
                         choices = concept1_menu, selected = "NGDP_RPCH"),
+            
+            selectInput("select_concept2", label = h4("Select concept2"), 
+                        choices = concept1_menu, selected = "GGXWDN_NGDP"),
             
             hr(),
             
             # Sidebar with a slider input for year 
             sliderInput("year_range",
-                        label = h3("Select year range"), 
+                        label = h4("Select year range"), 
                         min = 1980,
                         max = 2024,
                         value = c(1980, 2024),
@@ -113,28 +119,27 @@ ui <- navbarPage("IMF World Economic Outlook, April 2019",
 
         # Show a plot of the generated line chart
         mainPanel(
-           plotOutput("linePlot"),
-           textOutput("lastactual"),
-           textOutput("notes")
+           plotOutput("plot1"),
+           plotOutput("plot2")
         )
     )
     ),
     tabPanel("By region",
              sidebarLayout(
                sidebarPanel(
-                 selectInput("select_area2", label = h3("Select region"), 
+                 selectInput("select_region", label = h4("Select region"), 
                              choices = region_menu),
                  
                  hr(),
                  
-                 selectInput("select_concept2", label = h3("Select concept"), 
+                 selectInput("select_concept_region", label = h4("Select concept"), 
                              choices = concept2_menu),
                  
                  hr(),
                  
                  # Sidebar with a slider input for year 
-                 sliderInput("year_range2",
-                             label = h3("Select year range"), 
+                 sliderInput("year_range_region",
+                             label = h4("Select year range"), 
                              min = 1980,
                              max = 2024,
                              value = c(1980, 2024),
@@ -143,21 +148,21 @@ ui <- navbarPage("IMF World Economic Outlook, April 2019",
                
                # Show a plot of the generated line chart
                mainPanel(
-                 plotOutput("linePlot2")
+                 plotOutput("plot_region")
                )
              )
     ),
     tabPanel("By commodity",
              sidebarLayout(
                sidebarPanel(
-                 selectInput("select_concept3", label = h3("Select concept"), 
+                 selectInput("select_concept_commodity", label = h4("Select concept"), 
                              choices = concept3_menu),
                  
                  hr(),
                  
                  # Sidebar with a slider input for year 
-                 sliderInput("year_range3",
-                             label = h3("Select year range"), 
+                 sliderInput("year_range_commodity",
+                             label = h4("Select year range"), 
                              min = 1980,
                              max = 2024,
                              value = c(1980, 2024),
@@ -166,81 +171,131 @@ ui <- navbarPage("IMF World Economic Outlook, April 2019",
                
                # Show a plot of the generated line chart
                mainPanel(
-                 plotOutput("linePlot3")
+                 plotOutput("plot_commodity")
                )
              )
     )
 )
 
+# Functions
+wrapper <- function(x, ...) 
+{
+  paste(strwrap(x, ...), collapse = "\n")
+}
+
+draw_chart <- function(df) {
+  area <- df %>% 
+    arrange(REF_AREA) %>% 
+    `[[`("REF_AREA") %>% 
+    unique() %>% 
+    as.character()
+  
+  area1 <- areas %>% 
+    filter(Code == area[1]) %>% 
+    `[[`("Description")
+
+  area2 <- areas %>% 
+    filter(Code == area[2]) %>% 
+    `[[`("Description")
+  
+  note1 <- df %>% 
+    filter(REF_AREA == area[1]) %>% 
+    `[[`("NOTES") %>% 
+    `[`(1) %>% 
+    wrapper(width = 100)
+
+  note2 <- df %>% 
+    filter(REF_AREA == area[2]) %>% 
+    `[[`("NOTES") %>% 
+    `[`(1) %>% 
+    wrapper(width = 100)
+  
+
+  df %>% 
+    ggplot(aes(x = TIME_PERIOD, y = OBS_VALUE, color = REF_AREA)) +
+    geom_hline(yintercept = 0, size = 2, color = "white") +
+    geom_line() +
+    scale_color_discrete(name = "",
+                         labels = c(area1, area2)) +
+    labs(
+      title = concepts[concepts$Code == df$CONCEPT[1], ] %>% 
+        `[[`("Description") %>% 
+        `[`(1),
+      x = "",
+      y = paste0(units[units$Code == df$UNIT[1], "Description"], " ",
+                 scales[scales$Value == df$SCALE[1], "Description"]),
+      caption = paste0(
+                       "Last actual ", area1, ": ",
+                       df %>% 
+                         filter(REF_AREA == area[1]) %>% 
+                         `[[`("LASTACTUALDATE") %>% 
+                         `[`(1),
+                       "\n",
+                       "Last actual ", area2, ": ",
+                       df %>% 
+                         filter(REF_AREA == area[2]) %>% 
+                         `[[`("LASTACTUALDATE") %>% 
+                         `[`(1),
+                       "\n\n",
+                       note1, "\n", note2
+      )
+    ) +
+    theme(legend.position = "top",
+          plot.title = element_text(size = rel(2)))
+}
+
 # Define server logic required to draw a chart
 server <- function(input, output) {
-    output$linePlot <- renderPlot({
-      chart_data <- weo %>% 
-        filter(REF_AREA == input$select_area, CONCEPT == input$select_concept,
-               TIME_PERIOD >= input$year_range[1],
-               TIME_PERIOD <= input$year_range[2])
-      
-      chart_data %>% 
-        ggplot(aes(x = TIME_PERIOD, y = OBS_VALUE)) +
-        geom_hline(yintercept = 0, size = 2, color = "white") +
-        geom_line() +
-        scale_color_discrete(guide = FALSE) +
-        labs(
-          x = "",
-          y = paste0(units[units$Code == chart_data$UNIT[1], "Description"], " ",
-                     scales[scales$Value == chart_data$SCALE[1], "Description"])
-        )
-    })
-    
-    output$lastactual <- renderText(paste0("Last actual: ",
-                                     weo %>% 
-                                filter(REF_AREA == input$select_area, CONCEPT == input$select_concept) %>% 
-                                `[[`("LASTACTUALDATE") %>% 
-                                `[`(1))
-    )
+  chart_data1 <- reactive({
+    weo %>% 
+      filter(REF_AREA %in% c(input$select_area1, input$select_area2),
+             CONCEPT == input$select_concept1)
+  })
+  
+  output$plot1 <- renderPlot({
+    chart_data1() %>% 
+      filter(TIME_PERIOD >= input$year_range[1],
+             TIME_PERIOD <= input$year_range[2]) %>% 
+      draw_chart()
+  })
 
-    output$notes <- renderText(paste0("",
-                                           weo %>% 
-                                             filter(REF_AREA == input$select_area, CONCEPT == input$select_concept) %>% 
-                                             `[[`("NOTES") %>% 
-                                             `[`(1))
-    )
-    
-    output$linePlot2 <- renderPlot({
-      chart_data <- weo %>% 
-        filter(REF_AREA == input$select_area2, CONCEPT == input$select_concept2,
-               TIME_PERIOD >= input$year_range2[1],
-               TIME_PERIOD <= input$year_range2[2])
-      
-      chart_data %>% 
-        ggplot(aes(x = TIME_PERIOD, y = OBS_VALUE)) +
-        geom_hline(yintercept = 0, size = 2, color = "white") +
-        geom_line() +
-        scale_color_discrete(guide = FALSE) +
-        labs(
-          x = "",
-          y = paste0(units[units$Code == chart_data$UNIT[1], "Description"], " ",
-                     scales[scales$Value == chart_data$SCALE[1], "Description"])
-        )
-    })
-    
-    output$linePlot3 <- renderPlot({
-      chart_data <- weo %>% 
-        filter(REF_AREA == "001", CONCEPT == input$select_concept3,
-               TIME_PERIOD >= input$year_range3[1],
-               TIME_PERIOD <= input$year_range3[2])
-      
-      chart_data %>% 
-        ggplot(aes(x = TIME_PERIOD, y = OBS_VALUE)) +
-        geom_hline(yintercept = 0, size = 2, color = "white") +
-        geom_line() +
-        scale_color_discrete(guide = FALSE) +
-        labs(
-          x = "",
-          y = paste0(units[units$Code == chart_data$UNIT[1], "Description"], " ",
-                     scales[scales$Value == chart_data$SCALE[1], "Description"])
-        )
-    })
+  chart_data2 <- reactive({
+    weo %>% 
+      filter(REF_AREA %in% c(input$select_area1, input$select_area2),
+             CONCEPT == input$select_concept2)
+  })
+  
+  output$plot2 <- renderPlot({
+    chart_data2() %>% 
+      filter(TIME_PERIOD >= input$year_range[1],
+             TIME_PERIOD <= input$year_range[2]) %>% 
+      draw_chart()
+  })
+  
+  chart_data_region <- reactive({
+    weo %>% 
+      filter(REF_AREA == input$select_region, CONCEPT == input$select_concept_region)
+  })
+  
+  output$plot_region <- renderPlot({
+    chart_data_region() %>% 
+      filter(TIME_PERIOD >= input$year_range_region[1],
+             TIME_PERIOD <= input$year_range_region[2]) %>% 
+      draw_chart()
+  })
+
+  chart_data_commodity <- reactive({
+    weo %>% 
+      filter(REF_AREA == "001", CONCEPT == input$select_concept_commodity)
+  })
+  
+  output$plot_commodity <- renderPlot({
+    chart_data_commodity() %>% 
+      filter(TIME_PERIOD >= input$year_range_commodity[1],
+             TIME_PERIOD <= input$year_range_commodity[2]) %>% 
+      draw_chart()
+  })
+  
 }
 
 # Run the application 
