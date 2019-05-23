@@ -120,7 +120,9 @@ ui <- navbarPage("IMF World Economic Outlook, April 2019",
         # Show a plot of the generated line chart
         mainPanel(
            plotOutput("plot1"),
-           plotOutput("plot2")
+           htmlOutput("notes1"),
+           plotOutput("plot2"),
+           htmlOutput("notes2")
         )
     )
     ),
@@ -198,21 +200,13 @@ draw_chart <- function(df) {
     filter(Code == area[2]) %>% 
     `[[`("Description")
   
-  note1 <- df %>% 
-    filter(REF_AREA == area[1]) %>% 
-    `[[`("NOTES") %>% 
-    `[`(1) %>% 
-    wrapper(width = 100)
-
-  note2 <- df %>% 
-    filter(REF_AREA == area[2]) %>% 
-    `[[`("NOTES") %>% 
-    `[`(1) %>% 
-    wrapper(width = 100)
-  
 
   df %>% 
-    ggplot(aes(x = TIME_PERIOD, y = OBS_VALUE, color = REF_AREA)) +
+    mutate(actual = if_else(is.na(LASTACTUALDATE), "3",
+                            if_else(TIME_PERIOD > LASTACTUALDATE, "2", "1"))
+           ) %>% 
+    ggplot(aes(x = TIME_PERIOD, y = OBS_VALUE,
+               color = REF_AREA, linetype = actual)) +
     geom_hline(yintercept = 0, size = 2, color = "white") +
     geom_line() +
     scale_color_discrete(name = "",
@@ -235,13 +229,31 @@ draw_chart <- function(df) {
                        df %>% 
                          filter(REF_AREA == area[2]) %>% 
                          `[[`("LASTACTUALDATE") %>% 
-                         `[`(1),
-                       "\n\n",
-                       note1, "\n", note2
+                         `[`(1)
       )
     ) +
     theme(legend.position = "top",
           plot.title = element_text(size = rel(2)))
+}
+
+print_note <- function(df) {
+  area <- df %>% 
+    arrange(REF_AREA) %>% 
+    `[[`("REF_AREA") %>% 
+    unique() %>% 
+    as.character()
+  
+  note1 <- df %>% 
+    filter(REF_AREA == area[1]) %>% 
+    `[[`("NOTES") %>% 
+    `[`(1)
+  
+  note2 <- df %>% 
+    filter(REF_AREA == area[2]) %>% 
+    `[[`("NOTES") %>% 
+    `[`(1)
+  
+  paste0("<p>", note1, "<br>", note2, "</p>")
 }
 
 # Define server logic required to draw a chart
@@ -259,6 +271,11 @@ server <- function(input, output) {
       draw_chart()
   })
 
+  output$notes1 <- renderText({
+    chart_data1() %>% 
+      print_note()
+  })
+  
   chart_data2 <- reactive({
     weo %>% 
       filter(REF_AREA %in% c(input$select_area1, input$select_area2),
@@ -270,6 +287,11 @@ server <- function(input, output) {
       filter(TIME_PERIOD >= input$year_range[1],
              TIME_PERIOD <= input$year_range[2]) %>% 
       draw_chart()
+  })
+  
+  output$notes2 <- renderText({
+    chart_data2() %>% 
+      print_note()
   })
   
   chart_data_region <- reactive({
