@@ -104,7 +104,7 @@ ui <- navbarPage("IMF World Economic Outlook, April 2019",
                         choices = concept1_menu, selected = "NGDP_RPCH"),
             
             selectInput("select_concept2", label = h4("Select concept2"), 
-                        choices = concept1_menu, selected = "GGXWDN_NGDP"),
+                        choices = concept1_menu, selected = "GGXWDG_NGDP"),
             
             hr(),
             
@@ -129,14 +129,21 @@ ui <- navbarPage("IMF World Economic Outlook, April 2019",
     tabPanel("By region",
              sidebarLayout(
                sidebarPanel(
-                 selectInput("select_region", label = h4("Select region"), 
-                             choices = region_menu),
+                 selectInput("select_region1", label = h4("Select region1"), 
+                             choices = area_menu, selected = "200"),
+                 
+                 selectInput("select_region2", label = h4("Select region2"), 
+                             choices = area_menu, selected = "205"),
+                 
+                 selectInput("select_region3", label = h4("Select region3"), 
+                             choices = area_menu, selected = "505"),
                  
                  hr(),
                  
                  selectInput("select_concept_region", label = h4("Select concept"), 
-                             choices = concept2_menu),
-                 
+                             choices = concept2_menu, selected = "D_NGDPD"),
+
+                                  
                  hr(),
                  
                  # Sidebar with a slider input for year 
@@ -158,7 +165,7 @@ ui <- navbarPage("IMF World Economic Outlook, April 2019",
              sidebarLayout(
                sidebarPanel(
                  selectInput("select_concept_commodity", label = h4("Select concept"), 
-                             choices = concept3_menu),
+                             choices = concept3_menu, selected = "POILWTI"),
                  
                  hr(),
                  
@@ -180,27 +187,44 @@ ui <- navbarPage("IMF World Economic Outlook, April 2019",
 )
 
 # Functions
-wrapper <- function(x, ...) 
-{
-  paste(strwrap(x, ...), collapse = "\n")
+lookup_areas <- function(code) {
+  areas %>% 
+    filter(Code == code) %>% 
+    `[[`("Description")
+}
+
+lookup_lastactual <- function(code, df) {
+  df %>% 
+    filter(REF_AREA == code) %>% 
+    `[[`("LASTACTUALDATE") %>% 
+    `[`(1)
 }
 
 draw_chart <- function(df) {
-  area <- df %>% 
+  unique_area <- df %>% 
     arrange(REF_AREA) %>% 
     `[[`("REF_AREA") %>% 
     unique() %>% 
     as.character()
   
-  area1 <- areas %>% 
-    filter(Code == area[1]) %>% 
-    `[[`("Description")
-
-  area2 <- areas %>% 
-    filter(Code == area[2]) %>% 
-    `[[`("Description")
+  labels <- map_chr(unique_area, lookup_areas)
   
+  lastactual <- vector("character", length = length(unique_area))
+  
+  for (i in seq_along(unique_area)) {
+    lastactual[i] <- lookup_lastactual(unique_area[i], df)
+  }
+  
+  caption <- NULL
+  
+  for (i in seq_along(unique_area)) {
+    caption <- paste0(
+      caption, "\n",
+      "Last actual ", labels[i], ": ", lastactual[i]
+    )
+  }
 
+    
   df %>% 
     mutate(actual = if_else(is.na(LASTACTUALDATE), "3",
                             if_else(TIME_PERIOD > LASTACTUALDATE, "2", "1"))
@@ -210,7 +234,7 @@ draw_chart <- function(df) {
     geom_hline(yintercept = 0, size = 2, color = "white") +
     geom_line() +
     scale_color_discrete(name = "",
-                         labels = c(area1, area2)) +
+                         labels = labels) +
     labs(
       title = concepts[concepts$Code == df$CONCEPT[1], ] %>% 
         `[[`("Description") %>% 
@@ -218,20 +242,9 @@ draw_chart <- function(df) {
       x = "",
       y = paste0(units[units$Code == df$UNIT[1], "Description"], " ",
                  scales[scales$Value == df$SCALE[1], "Description"]),
-      caption = paste0(
-                       "Last actual ", area1, ": ",
-                       df %>% 
-                         filter(REF_AREA == area[1]) %>% 
-                         `[[`("LASTACTUALDATE") %>% 
-                         `[`(1),
-                       "\n",
-                       "Last actual ", area2, ": ",
-                       df %>% 
-                         filter(REF_AREA == area[2]) %>% 
-                         `[[`("LASTACTUALDATE") %>% 
-                         `[`(1)
-      )
+      caption = caption
     ) +
+    guides(linetype = "none") +
     theme(legend.position = "top",
           plot.title = element_text(size = rel(2)))
 }
@@ -296,7 +309,9 @@ server <- function(input, output) {
   
   chart_data_region <- reactive({
     weo %>% 
-      filter(REF_AREA == input$select_region, CONCEPT == input$select_concept_region)
+      filter(REF_AREA %in% c(input$select_region1, input$select_region2,
+                             input$select_region3),
+             CONCEPT == input$select_concept_region)
   })
   
   output$plot_region <- renderPlot({
