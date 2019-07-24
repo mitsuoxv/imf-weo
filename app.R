@@ -114,7 +114,15 @@ ui <- navbarPage("IMF World Economic Outlook, April 2019",
                         min = 1980,
                         max = 2024,
                         value = c(1980, 2024),
-                        sep = "")
+                        sep = ""),
+            
+            hr(),
+            
+            # Show source and Shiny app creator
+            tags$a(href = "https://www.imf.org/en/Publications/SPROLLS/world-economic-outlook-databases#sort=%40imfdate%20descending", 
+                   "Source: IMF"),
+            tags$a(href = "https://mitsuoxv.rbind.io/", 
+                   "Shiny app creator: Mitsuo Shiota")
         ),
 
         # Show a plot of the generated line chart
