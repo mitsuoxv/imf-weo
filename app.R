@@ -119,9 +119,10 @@ ui <- navbarPage("IMF World Economic Outlook, April 2019",
             hr(),
             
             # Show source and Shiny app creator
-            tags$a(href = "https://www.imf.org/en/Publications/SPROLLS/world-economic-outlook-databases#sort=%40imfdate%20descending", 
+            a(href = "https://www.imf.org/en/Publications/SPROLLS/world-economic-outlook-databases#sort=%40imfdate%20descending", 
                    "Source: IMF"),
-            tags$a(href = "https://mitsuoxv.rbind.io/", 
+            br(),
+            a(href = "https://mitsuoxv.rbind.io/", 
                    "Shiny app creator: Mitsuo Shiota")
         ),
 
