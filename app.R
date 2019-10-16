@@ -20,7 +20,7 @@ areas <- meta[[3]]
 world_code <- tibble(Code = "001")
 
 region_code <- tibble(Code = c("110", "119", "123", "163", "200", "205",
-                               "406", "440", "505", "511", "603", "901", "903",
+                               "400", "505", "511", "603", "903",
                                "998"))
 
 world <- areas %>% 
@@ -88,7 +88,7 @@ scales[scales$Value == "NULL", "Description"] <- ""
 scales[scales$Value == "1", "Description"] <- ""
 
 # Define UI for application that draws a histogram
-ui <- navbarPage("IMF World Economic Outlook, April 2019",
+ui <- navbarPage("IMF World Economic Outlook, October 2019",
     tabPanel("By area",
     sidebarLayout(
         sidebarPanel(
