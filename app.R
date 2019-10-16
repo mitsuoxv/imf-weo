@@ -62,7 +62,7 @@ level2 <- weo %>%
 
 region_only <- weo %>% 
   drop_na(OBS_VALUE) %>% 
-  filter(REF_AREA != "001") %>% 
+  filter(REF_AREA %in% region_code$Code) %>% 
   semi_join(level2, by = "CONCEPT")%>% 
   group_by(CONCEPT) %>% 
   count()
@@ -139,13 +139,13 @@ ui <- navbarPage("IMF World Economic Outlook, October 2019",
              sidebarLayout(
                sidebarPanel(
                  selectInput("select_region1", label = h4("Select region1"), 
-                             choices = area_menu, selected = "200"),
+                             choices = region_menu, selected = "200"),
                  
                  selectInput("select_region2", label = h4("Select region2"), 
-                             choices = area_menu, selected = "205"),
+                             choices = region_menu, selected = "205"),
                  
                  selectInput("select_region3", label = h4("Select region3"), 
-                             choices = area_menu, selected = "505"),
+                             choices = region_menu, selected = "505"),
                  
                  hr(),
                  
