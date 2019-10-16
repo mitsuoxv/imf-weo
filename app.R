@@ -14,6 +14,11 @@ library(tidyverse)
 # load data
 load("data/weo.rdata")
 
+weo$REF_AREA <- as.character(weo$REF_AREA)
+
+weo <- weo %>% 
+  mutate(REF_AREA = if_else(REF_AREA == "1", "001", REF_AREA))
+
 # create menus
 areas <- meta[[3]]
 
@@ -87,7 +92,7 @@ scales <- meta[[6]]
 scales[scales$Value == "NULL", "Description"] <- ""
 scales[scales$Value == "1", "Description"] <- ""
 
-# Define UI for application that draws a histogram
+# Define UI for application
 ui <- navbarPage("IMF World Economic Outlook, October 2019",
     tabPanel("By area",
     sidebarLayout(
