@@ -14,10 +14,6 @@ library(tidyverse)
 # load data
 load("data/weo.rdata")
 
-weo$REF_AREA <- as.character(weo$REF_AREA)
-
-weo <- weo %>% 
-  mutate(REF_AREA = if_else(REF_AREA == "1", "001", REF_AREA))
 
 # create menus
 areas <- meta[[3]]

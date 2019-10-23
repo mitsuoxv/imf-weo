@@ -37,6 +37,13 @@ for (i in seq_along(sheets)) {
 meta[[5]] <- readxl::read_excel(tf2, skip = 8, col_names = FALSE ,sheet = sheets[[5]])
 
 
+# World is 001 not 1
+weo$REF_AREA <- as.character(weo$REF_AREA)
+
+weo <- weo %>% 
+  mutate(REF_AREA = if_else(REF_AREA == "1", "001", REF_AREA))
+
+
 # save
 save(weo, meta, file = "data/weo.rdata")
 
