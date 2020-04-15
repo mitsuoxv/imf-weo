@@ -64,8 +64,8 @@ level2 <- weo %>%
 region_only <- weo %>% 
   drop_na(OBS_VALUE) %>% 
   filter(REF_AREA %in% region_code$Code) %>% 
-  semi_join(level2, by = "CONCEPT")%>% 
-  group_by(CONCEPT) %>% 
+  semi_join(level1, by = "CONCEPT") %>%
+  group_by(CONCEPT) %>%
   count()
 
 world_only <- level2 %>% 
@@ -89,7 +89,12 @@ scales[scales$Value == "NULL", "Description"] <- ""
 scales[scales$Value == "1", "Description"] <- ""
 
 # Define UI for application
-ui <- navbarPage("IMF World Economic Outlook, October 2019",
+ui <- navbarPage("IMF World Economic Outlook, April 2020",
+                 
+                 tags$head(includeHTML(("google-analytics.html"))),
+                 
+                 selected = "By area",
+                 
     tabPanel("By area",
     sidebarLayout(
         sidebarPanel(
@@ -113,14 +118,14 @@ ui <- navbarPage("IMF World Economic Outlook, October 2019",
             sliderInput("year_range",
                         label = h4("Select year range"), 
                         min = 1980,
-                        max = 2024,
-                        value = c(1980, 2024),
+                        max = 2021,
+                        value = c(1980, 2021),
                         sep = ""),
             
             hr(),
             
             # Show source and Shiny app creator
-            a(href = "https://www.imf.org/en/Publications/SPROLLS/world-economic-outlook-databases#sort=%40imfdate%20descending", 
+            a(href = "https://www.imf.org/external/pubs/ft/weo/2020/01/weodata/index.aspx", 
                    "Source: IMF"),
             br(),
             a(href = "https://mitsuoxv.rbind.io/", 
@@ -160,8 +165,8 @@ ui <- navbarPage("IMF World Economic Outlook, October 2019",
                  sliderInput("year_range_region",
                              label = h4("Select year range"), 
                              min = 1980,
-                             max = 2024,
-                             value = c(1980, 2024),
+                             max = 2021,
+                             value = c(1980, 2021),
                              sep = "")
                ),
                
@@ -183,8 +188,8 @@ ui <- navbarPage("IMF World Economic Outlook, October 2019",
                  sliderInput("year_range_commodity",
                              label = h4("Select year range"), 
                              min = 1980,
-                             max = 2024,
-                             value = c(1980, 2024),
+                             max = 2021,
+                             value = c(1980, 2021),
                              sep = "")
                ),
                
@@ -242,7 +247,7 @@ draw_chart <- function(df) {
     ggplot(aes(x = TIME_PERIOD, y = OBS_VALUE,
                color = REF_AREA, linetype = actual)) +
     geom_hline(yintercept = 0, size = 2, color = "white") +
-    geom_line() +
+    geom_line(size = 1) +
     scale_color_discrete(name = "",
                          labels = labels) +
     labs(

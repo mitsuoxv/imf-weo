@@ -3,7 +3,7 @@ IMF World Economic Outlook
 Mitsuo Shiota
 2019-05-21
 
-Updated: 2019-05-21
+Updated: 2020-04-15
 
 ## Summary
 
@@ -20,20 +20,21 @@ transform SDMX data to data frame.
 
 ``` r
 tf <- tempfile(tmpdir = tdir <- tempdir()) #temp file and folder
-download.file("https://www.imf.org/external/pubs/ft/weo/2019/01/weodata/WEOApr2019_SDMXData.zip", tf)
+download.file("https://www.imf.org/external/pubs/ft/weo/2020/01/weodata/WEOApr2020_SDMXData.zip", tf)
 sdmx_files <- unzip(tf, exdir = tdir)
 
 sdmx <- rsdmx::readSDMX(sdmx_files[1], isURL = FALSE)
 ```
 
-    ## Warning in readChar(file, file.info(file)$size): can only read in bytes in
-    ## a non-UTF-8 MBCS locale
+    ## Warning in readChar(file, file.info(file)$size): can only read in bytes in a
+    ## non-UTF-8 MBCS locale
 
 ``` r
 weo <- as_tibble(sdmx)
 
+weo<- map_dfc(weo, as.character)
+
 weo$LASTACTUALDATE <- weo$LASTACTUALDATE %>% 
-  as.character() %>% 
   as.integer()
 ```
 
@@ -50,11 +51,10 @@ weo$OBS_VALUE <- weo$OBS_VALUE %>%
     ## Warning in function_list[[k]](value): NAs introduced by coercion
 
 I have also downloaded an excel file, which contain meta data. I
-transform each sheet to data frame, and put it in a
-list.
+transform each sheet to data frame, and put it in a list.
 
 ``` r
-url <- "https://www.imf.org/external/pubs/ft/weo/2019/01/weodata/WEOApr2019_SDMXDSD.XLSX"
+url <- "https://www.imf.org/external/pubs/ft/weo/2020/01/weodata/WEOApr2020_SDMXDSD.XLSX"
 
 httr::GET(url, httr::write_disk(tf2 <- tempfile(fileext = ".xlsx")))
 ```
@@ -69,6 +69,12 @@ for (i in seq_along(sheets)) {
 }
 
 meta[[5]] <- readxl::read_excel(tf2, skip = 8, col_names = FALSE ,sheet = sheets[[5]])
+
+# World is 001 not 1
+weo$REF_AREA <- as.character(weo$REF_AREA)
+
+weo <- weo %>% 
+  mutate(REF_AREA = if_else(REF_AREA == "1", "001", REF_AREA))
 ```
 
 I save data and meta data in a rdata format file to use them later in

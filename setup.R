@@ -3,15 +3,16 @@ library(tidyverse)
 
 # Bulk download from IMF World Economic Outlook Database
 tf <- tempfile(tmpdir = tdir <- tempdir()) #temp file and folder
-download.file("https://www.imf.org/external/pubs/ft/weo/2019/02/weodata/WEOOct2019_SDMXData.zip", tf)
+download.file("https://www.imf.org/external/pubs/ft/weo/2020/01/weodata/WEOApr2020_SDMXData.zip", tf)
 sdmx_files <- unzip(tf, exdir = tdir)
 
 sdmx <- rsdmx::readSDMX(sdmx_files[1], isURL = FALSE)
 
 weo <- as_tibble(sdmx)
 
+weo<- map_dfc(weo, as.character)
+
 weo$LASTACTUALDATE <- weo$LASTACTUALDATE %>% 
-  as.character() %>% 
   as.integer()
 
 weo$TIME_PERIOD <- weo$TIME_PERIOD %>% 
@@ -22,7 +23,7 @@ weo$OBS_VALUE <- weo$OBS_VALUE %>%
 
 
 # Download meta data
-url <- "https://www.imf.org/external/pubs/ft/weo/2019/02/weodata/WEOOct2019_SDMXDSD.XLSX"
+url <- "https://www.imf.org/external/pubs/ft/weo/2020/01/weodata/WEOApr2020_SDMXDSD.XLSX"
 
 httr::GET(url, httr::write_disk(tf2 <- tempfile(fileext = ".xlsx")))
 
