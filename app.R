@@ -89,7 +89,7 @@ scales[scales$Value == "NULL", "Description"] <- ""
 scales[scales$Value == "1", "Description"] <- ""
 
 # Define UI for application
-ui <- navbarPage("IMF World Economic Outlook, April 2020",
+ui <- navbarPage("IMF World Economic Outlook, October 2020",
                  
                  tags$head(includeHTML(("google-analytics.html"))),
                  
@@ -118,14 +118,14 @@ ui <- navbarPage("IMF World Economic Outlook, April 2020",
             sliderInput("year_range",
                         label = h4("Select year range"), 
                         min = 1980,
-                        max = 2021,
-                        value = c(1980, 2021),
+                        max = 2025,
+                        value = c(1980, 2025),
                         sep = ""),
             
             hr(),
             
             # Show source and Shiny app creator
-            a(href = "https://www.imf.org/external/pubs/ft/weo/2020/01/weodata/index.aspx", 
+            a(href = "https://www.imf.org/en/Publications/SPROLLs/world-economic-outlook-databases#sort=%40imfdate%20descending", 
                    "Source: IMF"),
             br(),
             a(href = "https://mitsuoxv.rbind.io/", 
@@ -165,8 +165,8 @@ ui <- navbarPage("IMF World Economic Outlook, April 2020",
                  sliderInput("year_range_region",
                              label = h4("Select year range"), 
                              min = 1980,
-                             max = 2021,
-                             value = c(1980, 2021),
+                             max = 2025,
+                             value = c(1980, 2025),
                              sep = "")
                ),
                
@@ -188,8 +188,8 @@ ui <- navbarPage("IMF World Economic Outlook, April 2020",
                  sliderInput("year_range_commodity",
                              label = h4("Select year range"), 
                              min = 1980,
-                             max = 2021,
-                             value = c(1980, 2021),
+                             max = 2025,
+                             value = c(1980, 2025),
                              sep = "")
                ),
                
