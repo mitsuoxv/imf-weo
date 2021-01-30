@@ -238,16 +238,25 @@ draw_chart <- function(df) {
       "Last actual ", labels[i], ": ", lastactual[i]
     )
   }
+  
+  df <- df %>% 
+    group_by(REF_AREA) %>% 
+    mutate(
+      actual = if_else(is.na(LASTACTUALDATE), TRUE,
+                       if_else(TIME_PERIOD > LASTACTUALDATE, FALSE, TRUE)),
+      actual_lead = lead(actual)
+    ) %>% 
+    fill(actual_lead) %>% 
+    ungroup()
 
-    
-  df %>% 
-    mutate(actual = if_else(is.na(LASTACTUALDATE), "3",
-                            if_else(TIME_PERIOD > LASTACTUALDATE, "2", "1"))
-           ) %>% 
-    ggplot(aes(x = TIME_PERIOD, y = OBS_VALUE,
-               color = REF_AREA, linetype = actual)) +
+  ggplot() +
     geom_hline(yintercept = 0, size = 2, color = "white") +
-    geom_line(size = 1) +
+    geom_line(data = df %>% filter(actual),
+              aes(x = TIME_PERIOD, y = OBS_VALUE, color = REF_AREA),
+              size = 1) +
+    geom_line(data = df %>% filter(!actual_lead),
+              aes(x = TIME_PERIOD, y = OBS_VALUE, color = REF_AREA),
+              size = 1, linetype = "dashed") +
     scale_color_discrete(name = "",
                          labels = labels) +
     labs(
