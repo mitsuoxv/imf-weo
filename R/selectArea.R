@@ -105,16 +105,16 @@ selectAreaServer <- function(id) {
     chart_data <- reactive({
       weo %>%
         dplyr::filter(
-          REF_AREA %in% input$select_area,
-          CONCEPT == input$select_concept
+          ref_area %in% input$select_area,
+          concept == input$select_concept
         )
     })
     
     output$plot <- plotly::renderPlotly({
       chart_data() %>%
         dplyr::filter(
-          TIME_PERIOD >= input$year_range[1],
-          TIME_PERIOD <= input$year_range[2]
+          time_period >= input$year_range[1],
+          time_period <= input$year_range[2]
         ) %>%
         draw_chart()
     })
@@ -135,9 +135,9 @@ selectAreaServer <- function(id) {
       },
       content = function(file) {
         chart_data() %>%
-          dplyr::left_join(meta[[3]], by = c("REF_AREA" = "Code")) %>% 
-          dplyr::select(TIME_PERIOD, Description, OBS_VALUE) %>% 
-          tidyr::pivot_wider(names_from = Description, values_from = OBS_VALUE) %>% 
+          dplyr::left_join(meta[[3]], by = c("ref_area" = "code")) %>% 
+          dplyr::select(time_period, description, obs_value) %>% 
+          tidyr::pivot_wider(names_from = description, values_from = obs_value) %>% 
           vroom::vroom_write(file)
       }
     )

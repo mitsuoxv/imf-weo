@@ -13,69 +13,69 @@
 mainApp <- function() {
   areas <- meta[[3]]
   
-  world_code <- tibble::tibble(Code = "001")
+  world_code <- tibble::tibble(code = "001")
   
-  region_code <- tibble::tibble(Code = c(
+  region_code <- tibble::tibble(code = c(
     "110", "119", "123", "163", "200", "205",
     "400", "505", "511", "603", "903",
     "998"
   ))
   
   world <- areas %>%
-    dplyr::semi_join(world_code, by = "Code")
+    dplyr::semi_join(world_code, by = "code")
   
   regions <- areas %>%
-    dplyr::semi_join(region_code, by = "Code")
+    dplyr::semi_join(region_code, by = "code")
   
   countries <- areas %>%
-    dplyr::anti_join(world_code, by = "Code") %>%
-    dplyr::anti_join(region_code, by = "Code")
+    dplyr::anti_join(world_code, by = "code") %>%
+    dplyr::anti_join(region_code, by = "code")
   
-  world_menu <- split(world$Code, world$Description)
+  world_menu <- split(world$code, world$description)
   
-  region_menu <- split(regions$Code, regions$Description)
+  region_menu <- split(regions$code, regions$description)
   
-  country_menu <- split(countries$Code, countries$Description)
+  country_menu <- split(countries$code, countries$description)
   
   area_menu <- c(world_menu, region_menu, country_menu)
   
   concepts <- meta[[4]] %>%
-    dplyr::select(Code, Description)
+    dplyr::select(code, description)
   
   level1 <- weo %>%
-    dplyr::group_by(CONCEPT) %>%
+    dplyr::group_by(concept) %>%
     dplyr::count() %>%
     dplyr::filter(n > 1000)
   
   concept1 <- concepts %>%
-    dplyr::semi_join(level1, by = c("Code" = "CONCEPT"))
+    dplyr::semi_join(level1, by = c("code" = "concept"))
   
-  concept1_menu <- split(concept1$Code, concept1$Description)
+  concept1_menu <- split(concept1$code, concept1$description)
   
   level2 <- weo %>%
-    dplyr::group_by(CONCEPT) %>%
+    dplyr::group_by(concept) %>%
     dplyr::count() %>%
     dplyr::filter(n <= 1000)
   
   region_only <- weo %>%
-    dplyr::filter(!is.na(OBS_VALUE)) %>%
-    dplyr::filter(REF_AREA %in% region_code$Code) %>%
-    dplyr::semi_join(level1, by = "CONCEPT") %>%
-    dplyr::group_by(CONCEPT) %>%
+    dplyr::filter(!is.na(obs_value)) %>%
+    dplyr::filter(ref_area %in% region_code$code) %>%
+    dplyr::semi_join(level1, by = "concept") %>%
+    dplyr::group_by(concept) %>%
     dplyr::count()
   
   world_only <- level2 %>%
-    dplyr::anti_join(region_only, by = "CONCEPT")
+    dplyr::anti_join(region_only, by = "concept")
   
   concept2 <- concepts %>%
-    dplyr::semi_join(region_only, by = c("Code" = "CONCEPT"))
+    dplyr::semi_join(region_only, by = c("code" = "concept"))
   
-  concept2_menu <- split(concept2$Code, concept2$Description)
+  concept2_menu <- split(concept2$code, concept2$description)
   
   concept3 <- concepts %>%
-    dplyr::semi_join(world_only, by = c("Code" = "CONCEPT"))
+    dplyr::semi_join(world_only, by = c("code" = "concept"))
   
-  concept3_menu <- split(concept3$Code, concept3$Description)
+  concept3_menu <- split(concept3$code, concept3$description)
   
   # Define UI for application
   ui <- navbarPage("IMF World Economic Outlook, October 2020",

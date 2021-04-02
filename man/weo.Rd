@@ -7,15 +7,15 @@
 \format{
 A data frame.
 \describe{
-\item{UNIT}{1 letter showing unit}
-\item{CONCEPT}{concept}
-\item{REF_AREA}{area}
-\item{FREQ}{1 letter showing frequency}
-\item{LASTACTUALDATE}{last actual year}
-\item{SCALE}{scale}
-\item{NOTES}{notes}
-\item{TIME_PERIOD}{year}
-\item{OBS_VALUE}{value}
+\item{unit}{1 letter showing unit}
+\item{concept}{concept}
+\item{ref_area}{area code}
+\item{freq}{1 letter showing frequency}
+\item{lastactualdate}{last actual year}
+\item{scale}{scale}
+\item{notes}{notes}
+\item{time_period}{year}
+\item{obs_value}{value}
 }
 }
 \source{

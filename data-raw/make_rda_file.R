@@ -1,5 +1,6 @@
 # Libraries
 library(tidyverse)
+library(janitor)
 
 # Bulk download from IMF World Economic Outlook Database
 # tf <- tempfile(tmpdir = tdir <- tempdir()) #temp file and folder
@@ -45,6 +46,9 @@ weo$REF_AREA <- as.character(weo$REF_AREA)
 weo <- weo %>% 
   mutate(REF_AREA = if_else(REF_AREA == "1", "001", REF_AREA))
 
+# clean names
+weo <- clean_names(weo)
+meta <- map(meta, clean_names)
 
 # save
 # save(weo, meta, file = "data/weo.rdata")

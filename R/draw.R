@@ -13,21 +13,22 @@
 draw_chart <- function(df) {
 
   concepts <- meta[[4]] %>%
-    dplyr::select(Code, Description)
+    dplyr::select(code, description)
   
   units <- meta[[5]]
-  names(units) <- c("Code", "Description")
+  names(units) <- c("code", "desc")
   
-  scales <- meta[[6]]
-  scales[scales$Value == "NULL", "Description"] <- ""
-  scales[scales$Value == "1", "Description"] <- ""
+  scales <- meta[[6]] %>% 
+    dplyr::rename(desc = description)
+  scales[scales$value == "NULL", "desc"] <- ""
+  scales[scales$value == "1", "desc"] <- ""
   
   df <- df %>%
-    dplyr::left_join(meta[[3]], by = c("REF_AREA" = "Code")) %>% 
+    dplyr::left_join(meta[[3]], by = c("ref_area" = "code")) %>% 
     dplyr::rename(
-      year = TIME_PERIOD,
-      value = OBS_VALUE,
-      area = Description
+      year = time_period,
+      value = obs_value,
+      area = description
       )
   
   p <- df %>% 
@@ -39,13 +40,13 @@ draw_chart <- function(df) {
       size = 1
     ) +
     ggplot2::labs(
-      title = concepts[concepts$Code == df$CONCEPT[1], ] %>%
-        `[[`("Description") %>%
-        `[`(1),
+      title = concepts[concepts$code == df$concept[1], ] %>%
+        dplyr::pull(description) %>%
+        dplyr::first(),
       x = NULL,
       y = paste0(
-        units[units$Code == df$UNIT[1], "Description"], " ",
-        scales[scales$Value == df$SCALE[1], "Description"]
+        units[units$code == df$unit[1], "desc"], " ",
+        scales[scales$value == df$scale[1], "desc"]
       ),
       color = NULL
     ) +
@@ -72,14 +73,14 @@ draw_chart <- function(df) {
 #' }
 print_lastactual <- function(df) {
   df <- df %>%
-    dplyr::left_join(meta[[3]], by = c("REF_AREA" = "Code")) %>% 
-    dplyr::distinct(REF_AREA, Description, LASTACTUALDATE)
+    dplyr::left_join(meta[[3]], by = c("ref_area" = "code")) %>% 
+    dplyr::distinct(ref_area, description, lastactualdate)
 
-  if (all(is.na(df$LASTACTUALDATE))) {
+  if (all(is.na(df$lastactualdate))) {
     NULL
   } else {
     paste0("<p>", paste0(
-      paste0("Last actual ", df$Description, ": ", df$LASTACTUALDATE),
+      paste0("Last actual ", df$description, ": ", df$lastactualdate),
       collapse = "<br>"), "</p>")
   }
 }
@@ -98,17 +99,17 @@ print_lastactual <- function(df) {
 #' }
 print_note <- function(df) {
   area <- df %>%
-    dplyr::arrange(REF_AREA) %>%
-    dplyr::pull(REF_AREA) %>%
+    dplyr::arrange(ref_area) %>%
+    dplyr::pull(ref_area) %>%
     unique() %>%
     as.character()
   
   notes <- df %>%
     dplyr::filter(
-      REF_AREA %in% area,
-      TIME_PERIOD == max(TIME_PERIOD)
+      ref_area %in% area,
+      time_period == max(time_period)
       ) %>%
-    dplyr::pull(NOTES)
+    dplyr::pull(notes)
 
   if (all(is.na(notes))) {
     NULL
