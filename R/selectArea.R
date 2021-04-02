@@ -74,8 +74,15 @@ selectAreaUI <- function(id, a_menu, c_menu) {
     
     # Show a plot of the generated line chart
     mainPanel(
-      plotOutput(NS(id, "plot")),
-      htmlOutput(NS(id, "notes"))
+      plotly::plotlyOutput(NS(id, "plot")),
+      fluidRow(
+        column(4,
+               htmlOutput(NS(id, "lastactual"))),
+        column(4,
+               htmlOutput(NS(id, "notes"))),
+        column(4,
+               downloadButton(NS(id, "download"), "Download .tsv"))
+      )
     )
   )
 }
@@ -103,7 +110,7 @@ selectAreaServer <- function(id) {
         )
     })
     
-    output$plot <- renderPlot({
+    output$plot <- plotly::renderPlotly({
       chart_data() %>%
         dplyr::filter(
           TIME_PERIOD >= input$year_range[1],
@@ -112,10 +119,27 @@ selectAreaServer <- function(id) {
         draw_chart()
     })
     
+    output$lastactual <- renderText({
+      chart_data() %>%
+        print_lastactual()
+    })
+
     output$notes <- renderText({
       chart_data() %>%
         print_note()
     })
     
+    output$download <- downloadHandler(
+      filename = function() {
+        paste0(input$select_concept, ".tsv")
+      },
+      content = function(file) {
+        chart_data() %>%
+          dplyr::left_join(meta[[3]], by = c("REF_AREA" = "Code")) %>% 
+          dplyr::select(TIME_PERIOD, Description, OBS_VALUE) %>% 
+          tidyr::pivot_wider(names_from = Description, values_from = OBS_VALUE) %>% 
+          vroom::vroom_write(file)
+      }
+    )
   })
 }
