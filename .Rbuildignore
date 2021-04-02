@@ -1,0 +1,8 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^LICENSE\.md$
+^app\.R$
+^data-raw$
+^README\.md$
+^google-analytics\.html$
+^rsconnect$

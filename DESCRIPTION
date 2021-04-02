@@ -1,0 +1,25 @@
+Package: imfweo
+Title: IMF World Economic Outlook
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Mitsuo",
+           family = "Shiota",
+           role = c("aut", "cre"),
+           email = "mitsuoxv@gmail.com")
+Description: Show World Economic Outlook data.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
+Imports: 
+    dplyr,
+    ggplot2,
+    magrittr,
+    pkgload,
+    purrr,
+    shiny,
+    tibble,
+    tidyr
+Depends: 
+    R (>= 4.0)

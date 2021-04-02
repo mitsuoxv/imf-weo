@@ -47,5 +47,7 @@ weo <- weo %>%
 
 
 # save
-save(weo, meta, file = "data/weo.rdata")
+# save(weo, meta, file = "data/weo.rdata")
+usethis::use_data(weo, meta, overwrite = TRUE)
+
 
