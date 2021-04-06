@@ -1,2 +1,2 @@
 pkgload::load_all(".")
-mainApp()
+mainApp(weo = weo_2010)

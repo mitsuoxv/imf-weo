@@ -4,10 +4,20 @@
 \alias{selectAreaServer}
 \title{selectArea module server}
 \usage{
-selectAreaServer(id)
+selectAreaServer(id, data, m_area, m_concept, m_unit, m_scale)
 }
 \arguments{
 \item{id}{A character vector of length 1.}
+
+\item{data}{A data frame.}
+
+\item{m_area}{A data frame with 2 columns, code and area.}
+
+\item{m_concept}{A named character vector.}
+
+\item{m_unit}{A named character vector.}
+
+\item{m_scale}{A named character vector.}
 }
 \value{
 A module server.

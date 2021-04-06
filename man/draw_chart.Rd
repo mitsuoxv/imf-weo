@@ -4,10 +4,18 @@
 \alias{draw_chart}
 \title{Draw a line chart}
 \usage{
-draw_chart(df)
+draw_chart(df, m_area, m_concept, m_unit, m_scale)
 }
 \arguments{
 \item{df}{A data frame.}
+
+\item{m_area}{A data frame with 2 columns, code and area.}
+
+\item{m_concept}{A named character vector.}
+
+\item{m_unit}{A named character vector.}
+
+\item{m_scale}{A named character vector.}
 }
 \value{
 A plotly object.
@@ -17,6 +25,6 @@ Draw a time-series line chart.
 }
 \examples{
 \dontrun{
-draw_chart(df)
+draw_chart(df, m_area, m_concept, m_unit, m_scale)
 }
 }

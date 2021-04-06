@@ -92,6 +92,11 @@ selectAreaUI <- function(id, a_menu, c_menu) {
 #' selectArea module server
 #'
 #' @param id A character vector of length 1.
+#' @param data A data frame.
+#' @param m_area A data frame with 2 columns, code and area.
+#' @param m_concept A named character vector.
+#' @param m_unit A named character vector.
+#' @param m_scale A named character vector.
 #'
 #' @return A module server.
 #'
@@ -99,11 +104,11 @@ selectAreaUI <- function(id, a_menu, c_menu) {
 #' \dontrun{
 #' selectAreaServer("area")
 #' }
-selectAreaServer <- function(id) {
+selectAreaServer <- function(id, data, m_area, m_concept, m_unit, m_scale) {
   moduleServer(id, function(input, output, session) {
 
     chart_data <- reactive({
-      weo %>%
+      data %>%
         dplyr::filter(
           ref_area %in% input$select_area,
           concept == input$select_concept
@@ -113,15 +118,15 @@ selectAreaServer <- function(id) {
     output$plot <- plotly::renderPlotly({
       chart_data() %>%
         dplyr::filter(
-          time_period >= input$year_range[1],
-          time_period <= input$year_range[2]
+          year >= input$year_range[1],
+          year <= input$year_range[2]
         ) %>%
-        draw_chart()
+        draw_chart(m_area, m_concept, m_unit, m_scale)
     })
     
     output$lastactual <- renderText({
       chart_data() %>%
-        print_lastactual()
+        print_lastactual(m_area)
     })
 
     output$notes <- renderText({
@@ -135,9 +140,9 @@ selectAreaServer <- function(id) {
       },
       content = function(file) {
         chart_data() %>%
-          dplyr::left_join(meta[[3]], by = c("ref_area" = "code")) %>% 
-          dplyr::select(time_period, description, obs_value) %>% 
-          tidyr::pivot_wider(names_from = description, values_from = obs_value) %>% 
+          dplyr::left_join(m_area, by = c("ref_area" = "code")) %>%
+          dplyr::select(year, area, value) %>%
+          tidyr::pivot_wider(names_from = area, values_from = value) %>%
           vroom::vroom_write(file)
       }
     )

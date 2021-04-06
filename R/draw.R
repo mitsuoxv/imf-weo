@@ -3,52 +3,33 @@
 #' Draw a time-series line chart. 
 #'
 #' @param df A data frame.
+#' @param m_area A data frame with 2 columns, code and area.
+#' @param m_concept A named character vector.
+#' @param m_unit A named character vector.
+#' @param m_scale A named character vector.
 #'
 #' @return A plotly object.
 #'
 #' @examples
 #' \dontrun{
-#' draw_chart(df)
+#' draw_chart(df, m_area, m_concept, m_unit, m_scale)
 #' }
-draw_chart <- function(df) {
+draw_chart <- function(df, m_area, m_concept, m_unit, m_scale) {
 
-  concepts <- meta[[4]] %>%
-    dplyr::select(code, description)
-  
-  units <- meta[[5]]
-  names(units) <- c("code", "desc")
-  
-  scales <- meta[[6]] %>% 
-    dplyr::rename(desc = description)
-  scales[scales$value == "NULL", "desc"] <- ""
-  scales[scales$value == "1", "desc"] <- ""
-  
-  df <- df %>%
-    dplyr::left_join(meta[[3]], by = c("ref_area" = "code")) %>% 
-    dplyr::rename(
-      year = time_period,
-      value = obs_value,
-      area = description
-      )
-  
   p <- df %>% 
+    dplyr::left_join(m_area, by = c("ref_area" = "code")) %>% 
     dplyr::mutate(area = area %>% forcats::fct_reorder2(year, value)) %>% 
-    ggplot2::ggplot() +
-    ggplot2::geom_hline(yintercept = 0, size = 2, color = "white") +
-    ggplot2::geom_line(
-      ggplot2::aes(year, value, color = area),
-      size = 1
-    ) +
+    ggplot2::ggplot(ggplot2::aes(year, value, color = area)) +
+    ggplot2::geom_hline(yintercept = 0, size = 1, color = "white") +
+    ggplot2::geom_line() +
     ggplot2::labs(
-      title = concepts[concepts$code == df$concept[1], ] %>%
-        dplyr::pull(description) %>%
-        dplyr::first(),
-      x = NULL,
+      title = names(m_concept)[m_concept == df$concept[1]][1],
+      x = NULL, color = NULL,
       y = paste0(
-        units[units$code == df$unit[1], "desc"], " ",
-        scales[scales$value == df$scale[1], "desc"]
-      ),
-      color = NULL
+        names(m_unit)[m_unit == df$unit[1]],
+        " ",
+        names(m_scale)[m_scale == df$scale[1]]
+      )
     ) +
     ggplot2::guides(linetype = "none") +
     ggplot2::theme(
@@ -64,23 +45,24 @@ draw_chart <- function(df) {
 #' Print last actual year.
 #'
 #' @param df A data frame.
+#' @param m_area A data frame with 2 columns, code and area
 #'
 #' @return A character vector of length 1.
 #'
 #' @examples
 #' \dontrun{
-#' print_lastactual(df)
+#' print_lastactual(df, m_area)
 #' }
-print_lastactual <- function(df) {
+print_lastactual <- function(df, m_area) {
   df <- df %>%
-    dplyr::left_join(meta[[3]], by = c("ref_area" = "code")) %>% 
-    dplyr::distinct(ref_area, description, lastactualdate)
+    dplyr::left_join(m_area, by = c("ref_area" = "code")) %>% 
+    dplyr::distinct(ref_area, area, lastactualdate)
 
   if (all(is.na(df$lastactualdate))) {
     NULL
   } else {
     paste0("<p>", paste0(
-      paste0("Last actual ", df$description, ": ", df$lastactualdate),
+      paste0("Last actual ", df$area, ": ", df$lastactualdate),
       collapse = "<br>"), "</p>")
   }
 }
@@ -98,17 +80,9 @@ print_lastactual <- function(df) {
 #' print_note(df)
 #' }
 print_note <- function(df) {
-  area <- df %>%
-    dplyr::arrange(ref_area) %>%
-    dplyr::pull(ref_area) %>%
-    unique() %>%
-    as.character()
-  
+
   notes <- df %>%
-    dplyr::filter(
-      ref_area %in% area,
-      time_period == max(time_period)
-      ) %>%
+    dplyr::distinct(ref_area, .keep_all = TRUE) %>% 
     dplyr::pull(notes)
 
   if (all(is.na(notes))) {

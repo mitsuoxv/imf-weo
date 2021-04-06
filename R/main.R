@@ -1,7 +1,9 @@
 #' Show data
 #' 
 #' Provide 3 panels to show data by area, region, and commodity.
-#'
+#' 
+#' @param weo A list.
+#' 
 #' @return A shinyApp.
 #' @import shiny
 #' @export
@@ -10,73 +12,7 @@
 #' \dontrun{
 #' mainApp()
 #' }
-mainApp <- function() {
-  areas <- meta[[3]]
-  
-  world_code <- tibble::tibble(code = "001")
-  
-  region_code <- tibble::tibble(code = c(
-    "110", "119", "123", "163", "200", "205",
-    "400", "505", "511", "603", "903",
-    "998"
-  ))
-  
-  world <- areas %>%
-    dplyr::semi_join(world_code, by = "code")
-  
-  regions <- areas %>%
-    dplyr::semi_join(region_code, by = "code")
-  
-  countries <- areas %>%
-    dplyr::anti_join(world_code, by = "code") %>%
-    dplyr::anti_join(region_code, by = "code")
-  
-  world_menu <- split(world$code, world$description)
-  
-  region_menu <- split(regions$code, regions$description)
-  
-  country_menu <- split(countries$code, countries$description)
-  
-  area_menu <- c(world_menu, region_menu, country_menu)
-  
-  concepts <- meta[[4]] %>%
-    dplyr::select(code, description)
-  
-  level1 <- weo %>%
-    dplyr::group_by(concept) %>%
-    dplyr::count() %>%
-    dplyr::filter(n > 1000)
-  
-  concept1 <- concepts %>%
-    dplyr::semi_join(level1, by = c("code" = "concept"))
-  
-  concept1_menu <- split(concept1$code, concept1$description)
-  
-  level2 <- weo %>%
-    dplyr::group_by(concept) %>%
-    dplyr::count() %>%
-    dplyr::filter(n <= 1000)
-  
-  region_only <- weo %>%
-    dplyr::filter(!is.na(obs_value)) %>%
-    dplyr::filter(ref_area %in% region_code$code) %>%
-    dplyr::semi_join(level1, by = "concept") %>%
-    dplyr::group_by(concept) %>%
-    dplyr::count()
-  
-  world_only <- level2 %>%
-    dplyr::anti_join(region_only, by = "concept")
-  
-  concept2 <- concepts %>%
-    dplyr::semi_join(region_only, by = c("code" = "concept"))
-  
-  concept2_menu <- split(concept2$code, concept2$description)
-  
-  concept3 <- concepts %>%
-    dplyr::semi_join(world_only, by = c("code" = "concept"))
-  
-  concept3_menu <- split(concept3$code, concept3$description)
-  
+mainApp <- function(weo) {
   # Define UI for application
   ui <- navbarPage("IMF World Economic Outlook, October 2020",
   
@@ -84,13 +20,13 @@ mainApp <- function() {
     selected = "By area",
   
     tabPanel("By area",
-             selectAreaUI("area", area_menu, concept1_menu)
+             selectAreaUI("area", weo$a_menu$area, weo$c_menu$area)
     ),
     tabPanel("By region",
-             selectAreaUI("region", region_menu, concept2_menu)
+             selectAreaUI("region", weo$a_menu$region, weo$c_menu$region)
     ),
     tabPanel("By commodity",
-             selectAreaUI("commodity", world_menu, concept3_menu)
+             selectAreaUI("commodity", weo$a_menu$world, weo$c_menu$world)
     )
   )
   
@@ -98,9 +34,12 @@ mainApp <- function() {
   # Define server logic required to draw a chart
   server <- function(input, output, session) {
   
-    selectAreaServer("area")
-    selectAreaServer("region")
-    selectAreaServer("commodity")
+    selectAreaServer("area", weo$data,
+                     weo$meta$area, weo$meta$concept, weo$meta$unit, weo$meta$scale)
+    selectAreaServer("region", weo$data,
+                     weo$meta$area, weo$meta$concept, weo$meta$unit, weo$meta$scale)
+    selectAreaServer("commodity", weo$data,
+                     weo$meta$area, weo$meta$concept, weo$meta$unit, weo$meta$scale)
   
   }
   
