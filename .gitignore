@@ -25,4 +25,6 @@ vignettes/*.pdf
 # Shiny token, see https://shiny.rstudio.com/articles/shinyapps.html
 rsconnect/
 # Download SDMX data from IMF
-weooct2020-sdmxdata/
+downloads/
+# Save old data
+data-old/

@@ -1,4 +1,4 @@
-#' IMF World Economic Outlook data
+#' IMF World Economic Outlook data, current
 #'
 #' Economic data published in October 2020.
 #'
@@ -48,4 +48,23 @@
 #' }
 #' }
 #' }
-"weo_2010"
+"weo_2104"
+
+#' IMF World Economic Outlook data, previous
+#'
+#' Economic data published in October 2020. Cut to since 2019 only.
+#'
+#' @source https://www.imf.org/~/media/Files/Publications/WEO/WEO-Database/2020/02/weooct2020_sdmxdata.ashx
+#' @format A tibble.
+#' \describe{
+#' \item{unit}{refer to meta unit}
+#' \item{concept}{refer to meta concept}
+#' \item{ref_area}{refer to meta area}
+#' \item{freq}{"A" for annual}
+#' \item{lastactualdate}{year like 2019}
+#' \item{scale}{refer to meta scale}
+#' \item{notes}{some notes}
+#' \item{year}{year like 1980}
+#' \item{value}{observed value}
+#' }
+"weo_2010_cut_data"

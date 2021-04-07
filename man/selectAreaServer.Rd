@@ -4,12 +4,14 @@
 \alias{selectAreaServer}
 \title{selectArea module server}
 \usage{
-selectAreaServer(id, data, m_area, m_concept, m_unit, m_scale)
+selectAreaServer(id, data, data_prev, m_area, m_concept, m_unit, m_scale)
 }
 \arguments{
 \item{id}{A character vector of length 1.}
 
 \item{data}{A data frame.}
+
+\item{data_prev}{A data frame.}
 
 \item{m_area}{A data frame with 2 columns, code and area.}
 
@@ -27,6 +29,7 @@ selectArea module server
 }
 \examples{
 \dontrun{
-selectAreaServer("area")
+selectAreaServer("area", weo$data, weo_prev_data,
+weo$meta$area, weo$meta$concept, weo$meta$unit, weo$meta$scale)
 }
 }

@@ -3,6 +3,8 @@
 #' Draw a time-series line chart. 
 #'
 #' @param df A data frame.
+#' @param df_prev A data frame.
+#' @param prev "Yes" or "No".
 #' @param m_area A data frame with 2 columns, code and area.
 #' @param m_concept A named character vector.
 #' @param m_unit A named character vector.
@@ -14,11 +16,10 @@
 #' \dontrun{
 #' draw_chart(df, m_area, m_concept, m_unit, m_scale)
 #' }
-draw_chart <- function(df, m_area, m_concept, m_unit, m_scale) {
+draw_chart <- function(df, df_prev, prev, m_area, m_concept, m_unit, m_scale) {
 
   p <- df %>% 
     dplyr::left_join(m_area, by = c("ref_area" = "code")) %>% 
-    dplyr::mutate(area = area %>% forcats::fct_reorder2(year, value)) %>% 
     ggplot2::ggplot(ggplot2::aes(year, value, color = area)) +
     ggplot2::geom_hline(yintercept = 0, size = 1, color = "white") +
     ggplot2::geom_line() +
@@ -33,8 +34,14 @@ draw_chart <- function(df, m_area, m_concept, m_unit, m_scale) {
     ) +
     ggplot2::guides(linetype = "none") +
     ggplot2::theme(
-      plot.title = ggplot2::element_text(size = ggplot2::rel(2))
+      plot.title = ggplot2::element_text(size = ggplot2::rel(1.5))
     )
+  
+  if (prev == "Yes") {
+    p <- p + ggplot2::geom_line(data = df_prev%>% 
+                                  dplyr::left_join(m_area, by = c("ref_area" = "code")),
+                                linetype = "dotted")
+  }
   
   plotly::ggplotly(p)
 }

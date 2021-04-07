@@ -3,6 +3,7 @@
 #' Provide 3 panels to show data by area, region, and commodity.
 #' 
 #' @param weo A list.
+#' @param weo_prev_data A data frame.
 #' 
 #' @return A shinyApp.
 #' @import shiny
@@ -12,9 +13,9 @@
 #' \dontrun{
 #' mainApp()
 #' }
-mainApp <- function(weo) {
+mainApp <- function(weo, weo_prev_data) {
   # Define UI for application
-  ui <- navbarPage("IMF World Economic Outlook, October 2020",
+  ui <- navbarPage("IMF World Economic Outlook, April 2021",
   
     tags$head(includeHTML(("google-analytics.html"))),
     selected = "By area",
@@ -34,11 +35,11 @@ mainApp <- function(weo) {
   # Define server logic required to draw a chart
   server <- function(input, output, session) {
   
-    selectAreaServer("area", weo$data,
+    selectAreaServer("area", weo$data, weo_prev_data,
                      weo$meta$area, weo$meta$concept, weo$meta$unit, weo$meta$scale)
-    selectAreaServer("region", weo$data,
+    selectAreaServer("region", weo$data, weo_prev_data,
                      weo$meta$area, weo$meta$concept, weo$meta$unit, weo$meta$scale)
-    selectAreaServer("commodity", weo$data,
+    selectAreaServer("commodity", weo$data, weo_prev_data,
                      weo$meta$area, weo$meta$concept, weo$meta$unit, weo$meta$scale)
   
   }

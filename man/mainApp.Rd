@@ -4,10 +4,12 @@
 \alias{mainApp}
 \title{Show data}
 \usage{
-mainApp(weo)
+mainApp(weo, weo_prev_data)
 }
 \arguments{
 \item{weo}{A list.}
+
+\item{weo_prev_data}{A data frame.}
 }
 \value{
 A shinyApp.

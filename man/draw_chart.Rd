@@ -4,10 +4,14 @@
 \alias{draw_chart}
 \title{Draw a line chart}
 \usage{
-draw_chart(df, m_area, m_concept, m_unit, m_scale)
+draw_chart(df, df_prev, prev, m_area, m_concept, m_unit, m_scale)
 }
 \arguments{
 \item{df}{A data frame.}
+
+\item{df_prev}{A data frame.}
+
+\item{prev}{"Yes" or "No".}
 
 \item{m_area}{A data frame with 2 columns, code and area.}
 
