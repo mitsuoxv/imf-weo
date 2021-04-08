@@ -116,7 +116,9 @@ selectAreaServer <- function(id, data, data_prev, m_area, m_concept, m_unit, m_s
           year >= input$year_range[1],
           year <= input$year_range[2]
         )
-    })
+    }) %>% 
+      bindCache(input$select_area, input$select_concept,
+                input$year_range)
     
     chart_data_prev <- reactive({
       data_prev %>%
@@ -126,7 +128,9 @@ selectAreaServer <- function(id, data, data_prev, m_area, m_concept, m_unit, m_s
           year >= input$year_range[1],
           year <= input$year_range[2]
         )
-    })
+    }) %>% 
+      bindCache(input$select_area, input$select_concept,
+                input$year_range)
     
     output$plot <- plotly::renderPlotly({
       draw_chart(chart_data(), chart_data_prev(), input$previous,
