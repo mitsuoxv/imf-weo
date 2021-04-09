@@ -28,3 +28,5 @@ rsconnect/
 downloads/
 # Save old data
 data-old/
+# Google Analytics
+google-analytics.html
