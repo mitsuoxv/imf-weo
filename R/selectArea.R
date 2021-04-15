@@ -80,7 +80,7 @@ selectAreaUI <- function(id, a_menu, c_menu) {
         column(4,
                htmlOutput(NS(id, "notes"))),
         column(4,
-               downloadButton(NS(id, "download"), "Download"))
+               downloadButton(NS(id, "download"), "Download .tsv"))
       )
     )
   )
@@ -149,7 +149,7 @@ selectAreaServer <- function(id, data, data_prev, m_area, m_concept, m_unit, m_s
     
     output$download <- downloadHandler(
       filename = function() {
-        paste0(input$select_concept, ".csv")
+        paste0(input$select_concept, ".tsv")
       },
       content = function(file) {
         if (input$previous == "Yes") {
