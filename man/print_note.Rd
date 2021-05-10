@@ -7,7 +7,7 @@
 print_note(df)
 }
 \arguments{
-\item{df}{A data frame.}
+\item{df}{A tibble.}
 }
 \value{
 A character vector of length 1.

@@ -2,10 +2,10 @@
 #' 
 #' Draw a time-series line chart. 
 #'
-#' @param df A data frame.
-#' @param df_prev A data frame.
+#' @param df A tibble.
+#' @param df_prev A tibble.
 #' @param prev "Yes" or "No".
-#' @param m_area A data frame with 2 columns, code and area.
+#' @param m_area A tibble with 2 columns, code and area.
 #' @param m_concept A named character vector.
 #' @param m_unit A named character vector.
 #' @param m_scale A named character vector.
@@ -51,8 +51,8 @@ draw_chart <- function(df, df_prev, prev, m_area, m_concept, m_unit, m_scale) {
 #' 
 #' Print last actual year.
 #'
-#' @param df A data frame.
-#' @param m_area A data frame with 2 columns, code and area
+#' @param df A tibble.
+#' @param m_area A tibble with 2 columns, code and area
 #'
 #' @return A character vector of length 1.
 #'
@@ -78,7 +78,7 @@ print_lastactual <- function(df, m_area) {
 #' 
 #' Print notes.
 #'
-#' @param df A data frame.
+#' @param df A tibble.
 #'
 #' @return A character vector of length 1.
 #'

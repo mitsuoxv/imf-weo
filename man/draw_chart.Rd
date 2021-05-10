@@ -7,13 +7,13 @@
 draw_chart(df, df_prev, prev, m_area, m_concept, m_unit, m_scale)
 }
 \arguments{
-\item{df}{A data frame.}
+\item{df}{A tibble.}
 
-\item{df_prev}{A data frame.}
+\item{df_prev}{A tibble.}
 
 \item{prev}{"Yes" or "No".}
 
-\item{m_area}{A data frame with 2 columns, code and area.}
+\item{m_area}{A tibble with 2 columns, code and area.}
 
 \item{m_concept}{A named character vector.}
 

@@ -4,6 +4,7 @@ NAMESPACE
 R/data.R
 R/draw.R
 R/main.R
+R/output.R
 R/selectArea.R
 R/utils-pipe.R
 data/weo_2010_cut_data.rda

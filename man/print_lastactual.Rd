@@ -7,9 +7,9 @@
 print_lastactual(df, m_area)
 }
 \arguments{
-\item{df}{A data frame.}
+\item{df}{A tibble.}
 
-\item{m_area}{A data frame with 2 columns, code and area}
+\item{m_area}{A tibble with 2 columns, code and area}
 }
 \value{
 A character vector of length 1.

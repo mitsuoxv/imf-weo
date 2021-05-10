@@ -91,12 +91,12 @@ selectAreaUI <- function(id, a_menu, c_menu) {
 #' selectArea module server
 #'
 #' @param id A character vector of length 1.
-#' @param data A data frame.
-#' @param m_area A data frame with 2 columns, code and area.
+#' @param data A tibble.
+#' @param m_area A tibble with 2 columns, code and area.
 #' @param m_concept A named character vector.
 #' @param m_unit A named character vector.
 #' @param m_scale A named character vector.
-#' @param data_prev A data frame.
+#' @param data_prev A tibble.
 #'
 #' @return A module server.
 #'
@@ -152,21 +152,10 @@ selectAreaServer <- function(id, data, data_prev, m_area, m_concept, m_unit, m_s
         paste0(input$select_concept, ".tsv")
       },
       content = function(file) {
-        if (input$previous == "Yes") {
-          bind_rows(chart_data() %>% mutate(publish = "2104"),
-                    chart_data_prev() %>% mutate(publish = "2010")) %>% 
-            dplyr::left_join(m_area, by = c("ref_area" = "code")) %>%
-            tidyr::unite(area_publish, c(area, publish)) %>% 
-            dplyr::select(year, area_publish, value) %>%
-            tidyr::pivot_wider(names_from = area_publish, values_from = value) %>%
-            vroom::vroom_write(file)
-        } else {
-          chart_data() %>%
-            dplyr::left_join(m_area, by = c("ref_area" = "code")) %>%
-            dplyr::select(year, area, value) %>%
-            tidyr::pivot_wider(names_from = area, values_from = value) %>%
-            vroom::vroom_write(file)
-        }
+        data <- output_data(input$previous, 
+                            chart_data(), chart_data_prev(),
+                            "2104", "2010", m_area)
+        vroom::vroom_write(data, file)
       }
     )
   })
