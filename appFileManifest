@@ -7,6 +7,8 @@ R/main.R
 R/output.R
 R/selectArea.R
 R/utils-pipe.R
-data/weo_2010_cut_data.rda
-data/weo_2104.rda
+data/data_2010_cut.rda
+data/data_2104.rda
+data/menu.rda
+data/meta.rda
 google-analytics.html

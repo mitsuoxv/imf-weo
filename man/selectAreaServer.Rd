@@ -4,7 +4,7 @@
 \alias{selectAreaServer}
 \title{selectArea module server}
 \usage{
-selectAreaServer(id, data, data_prev, m_area, m_concept, m_unit, m_scale)
+selectAreaServer(id, data, data_prev, name_current, name_prev)
 }
 \arguments{
 \item{id}{A character vector of length 1.}
@@ -13,13 +13,9 @@ selectAreaServer(id, data, data_prev, m_area, m_concept, m_unit, m_scale)
 
 \item{data_prev}{A tibble.}
 
-\item{m_area}{A tibble with 2 columns, code and area.}
+\item{name_current}{A character vector of length 1, like "2104".}
 
-\item{m_concept}{A named character vector.}
-
-\item{m_unit}{A named character vector.}
-
-\item{m_scale}{A named character vector.}
+\item{name_prev}{A character vector of length 1, like "2010".}
 }
 \value{
 A module server.
@@ -29,7 +25,6 @@ selectArea module server
 }
 \examples{
 \dontrun{
-selectAreaServer("area", weo$data, weo_prev_data,
-weo$meta$area, weo$meta$concept, weo$meta$unit, weo$meta$scale)
+selectAreaServer("area", data_2014, data_2010_cut, "2104", "2010")
 }
 }

@@ -108,8 +108,9 @@ names(scales) <- meta[[6]]$description
 names(scales)[3:4] <- ""
 
 # make a list
-weo_2104 <- list(
-  data = weo_df,
+data_2104 <- weo_df
+
+menu <- list(
   a_menu = list(
     area = area_menu,
     region = region_menu,
@@ -119,16 +120,17 @@ weo_2104 <- list(
     area = concept1_menu, 
     region = concept2_menu,
     world = concept3_menu
-  ),
-  meta = list(
-    area = areas,
-    concept = concept_vec,
-    unit = units,
-    scale = scales
   )
 )
 
+meta <- list(
+  area = areas,
+  concept = concept_vec,
+  unit = units,
+  scale = scales
+)
+
 # save
-usethis::use_data(weo_2104)
+usethis::use_data(data_2104, menu, meta)
 
 

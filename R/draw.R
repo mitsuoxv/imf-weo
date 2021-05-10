@@ -2,34 +2,30 @@
 #' 
 #' Draw a time-series line chart. 
 #'
+#' @param prev "Yes" or "No".
 #' @param df A tibble.
 #' @param df_prev A tibble.
-#' @param prev "Yes" or "No".
-#' @param m_area A tibble with 2 columns, code and area.
-#' @param m_concept A named character vector.
-#' @param m_unit A named character vector.
-#' @param m_scale A named character vector.
 #'
 #' @return A plotly object.
 #'
 #' @examples
 #' \dontrun{
-#' draw_chart(df, m_area, m_concept, m_unit, m_scale)
+#' draw_chart(prev, df, df_prev)
 #' }
-draw_chart <- function(df, df_prev, prev, m_area, m_concept, m_unit, m_scale) {
+draw_chart <- function(prev, df, df_prev) {
 
   p <- df %>% 
-    dplyr::left_join(m_area, by = c("ref_area" = "code")) %>% 
+    dplyr::left_join(meta$area, by = c("ref_area" = "code")) %>% 
     ggplot2::ggplot(ggplot2::aes(year, value, color = area)) +
     ggplot2::geom_hline(yintercept = 0, size = 1, color = "white") +
     ggplot2::geom_line() +
     ggplot2::labs(
-      title = names(m_concept)[m_concept == df$concept[1]][1],
+      title = names(meta$concept)[meta$concept == df$concept[1]][1],
       x = NULL, color = NULL,
       y = paste0(
-        names(m_unit)[m_unit == df$unit[1]],
+        names(meta$unit)[meta$unit == df$unit[1]],
         " ",
-        names(m_scale)[m_scale == df$scale[1]]
+        names(meta$scale)[meta$scale == df$scale[1]]
       )
     ) +
     ggplot2::guides(linetype = "none") +
@@ -39,7 +35,7 @@ draw_chart <- function(df, df_prev, prev, m_area, m_concept, m_unit, m_scale) {
   
   if (prev == "Yes") {
     p <- p + ggplot2::geom_line(data = df_prev%>% 
-                                  dplyr::left_join(m_area, by = c("ref_area" = "code")),
+                                  dplyr::left_join(meta$area, by = c("ref_area" = "code")),
                                 linetype = "dotted")
   }
   
@@ -52,17 +48,16 @@ draw_chart <- function(df, df_prev, prev, m_area, m_concept, m_unit, m_scale) {
 #' Print last actual year.
 #'
 #' @param df A tibble.
-#' @param m_area A tibble with 2 columns, code and area
 #'
 #' @return A character vector of length 1.
 #'
 #' @examples
 #' \dontrun{
-#' print_lastactual(df, m_area)
+#' print_lastactual(df)
 #' }
-print_lastactual <- function(df, m_area) {
+print_lastactual <- function(df) {
   df <- df %>%
-    dplyr::left_join(m_area, by = c("ref_area" = "code")) %>% 
+    dplyr::left_join(meta$area, by = c("ref_area" = "code")) %>% 
     dplyr::distinct(ref_area, area, lastactualdate)
 
   if (all(is.na(df$lastactualdate))) {

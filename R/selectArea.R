@@ -88,24 +88,20 @@ selectAreaUI <- function(id, a_menu, c_menu) {
 
 #' selectArea module server
 #' 
-#' selectArea module server
-#'
 #' @param id A character vector of length 1.
 #' @param data A tibble.
-#' @param m_area A tibble with 2 columns, code and area.
-#' @param m_concept A named character vector.
-#' @param m_unit A named character vector.
-#' @param m_scale A named character vector.
 #' @param data_prev A tibble.
+#' @param name_current A character vector of length 1, like "2104".
+#' @param name_prev A character vector of length 1, like "2010".
 #'
 #' @return A module server.
 #'
 #' @examples
 #' \dontrun{
-#' selectAreaServer("area", weo$data, weo_prev_data,
-#' weo$meta$area, weo$meta$concept, weo$meta$unit, weo$meta$scale)
+#' selectAreaServer("area", data_2014, data_2010_cut, "2104", "2010")
 #' }
-selectAreaServer <- function(id, data, data_prev, m_area, m_concept, m_unit, m_scale) {
+selectAreaServer <- function(id, data, data_prev, 
+                             name_current, name_prev) {
   moduleServer(id, function(input, output, session) {
 
     chart_data <- reactive({
@@ -133,13 +129,13 @@ selectAreaServer <- function(id, data, data_prev, m_area, m_concept, m_unit, m_s
                 input$year_range)
     
     output$plot <- plotly::renderPlotly({
-      draw_chart(chart_data(), chart_data_prev(), input$previous,
-                 m_area, m_concept, m_unit, m_scale)
+      draw_chart(input$previous,
+                 chart_data(), chart_data_prev())
     })
     
     output$lastactual <- renderText({
       chart_data() %>%
-        print_lastactual(m_area)
+        print_lastactual()
     })
 
     output$notes <- renderText({
@@ -154,7 +150,7 @@ selectAreaServer <- function(id, data, data_prev, m_area, m_concept, m_unit, m_s
       content = function(file) {
         data <- output_data(input$previous, 
                             chart_data(), chart_data_prev(),
-                            "2104", "2010", m_area)
+                            name_current, name_prev)
         vroom::vroom_write(data, file)
       }
     )

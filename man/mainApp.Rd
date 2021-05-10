@@ -4,12 +4,16 @@
 \alias{mainApp}
 \title{Show data}
 \usage{
-mainApp(weo, weo_prev_data)
+mainApp(data_current, data_prev, name_current, name_prev)
 }
 \arguments{
-\item{weo}{A list.}
+\item{data_current}{A tibble}
 
-\item{weo_prev_data}{A data frame.}
+\item{data_prev}{A tibble.}
+
+\item{name_current}{A character vector of length 1, like "2104".}
+
+\item{name_prev}{A character vector of length 1, like "2010".}
 }
 \value{
 A shinyApp.

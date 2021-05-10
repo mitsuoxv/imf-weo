@@ -4,22 +4,14 @@
 \alias{draw_chart}
 \title{Draw a line chart}
 \usage{
-draw_chart(df, df_prev, prev, m_area, m_concept, m_unit, m_scale)
+draw_chart(prev, df, df_prev)
 }
 \arguments{
+\item{prev}{"Yes" or "No".}
+
 \item{df}{A tibble.}
 
 \item{df_prev}{A tibble.}
-
-\item{prev}{"Yes" or "No".}
-
-\item{m_area}{A tibble with 2 columns, code and area.}
-
-\item{m_concept}{A named character vector.}
-
-\item{m_unit}{A named character vector.}
-
-\item{m_scale}{A named character vector.}
 }
 \value{
 A plotly object.
@@ -29,6 +21,6 @@ Draw a time-series line chart.
 }
 \examples{
 \dontrun{
-draw_chart(df, m_area, m_concept, m_unit, m_scale)
+draw_chart(prev, df, df_prev)
 }
 }

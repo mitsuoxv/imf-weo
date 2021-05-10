@@ -4,7 +4,7 @@
 \alias{output_data}
 \title{Prepare download data}
 \usage{
-output_data(prev, df, df_prev, pub_ym_current, pub_ym_prev, m_area)
+output_data(prev, df, df_prev, name_current, name_prev)
 }
 \arguments{
 \item{prev}{A character vector of length 1, "Yes" or "No".}
@@ -13,11 +13,9 @@ output_data(prev, df, df_prev, pub_ym_current, pub_ym_prev, m_area)
 
 \item{df_prev}{A tibble.}
 
-\item{pub_ym_current}{A character vector of length 1, like "2104".}
+\item{name_current}{A character vector of length 1, like "2104".}
 
-\item{pub_ym_prev}{A character vector of length 1, like "2010".}
-
-\item{m_area}{A tibble, with 2 columns: code and area.}
+\item{name_prev}{A character vector of length 1, like "2010".}
 }
 \value{
 A tibble.
@@ -28,6 +26,6 @@ Prepare download data
 \examples{
 \dontrun{
 output_data(input$previous, chart_data(), chart_data_prev(),
-"2104", "2010", m_area)
+"2104", "2010")
 }
 }

@@ -4,12 +4,10 @@
 \alias{print_lastactual}
 \title{Print last actual year}
 \usage{
-print_lastactual(df, m_area)
+print_lastactual(df)
 }
 \arguments{
 \item{df}{A tibble.}
-
-\item{m_area}{A tibble with 2 columns, code and area}
 }
 \value{
 A character vector of length 1.
@@ -19,6 +17,6 @@ Print last actual year.
 }
 \examples{
 \dontrun{
-print_lastactual(df, m_area)
+print_lastactual(df)
 }
 }
