@@ -37,19 +37,19 @@ meta_file <- "downloads/weoapr2021-sdmx-dsd.xlsx"
 
 sheets <- readxl::excel_sheets(meta_file)
 
-meta <- vector("list", length(sheets))
+meta_list <- vector("list", length(sheets))
 
 for (i in seq_along(sheets)) {
-  meta[[i]] <- readxl::read_excel(meta_file, skip = 7, sheet = sheets[[i]])
+  meta_list[[i]] <- readxl::read_excel(meta_file, skip = 7, sheet = sheets[[i]])
 }
 
-meta[[5]] <- readxl::read_excel(meta_file, skip = 8, col_names = FALSE ,sheet = sheets[[5]])
+meta_list[[5]] <- readxl::read_excel(meta_file, skip = 8, col_names = FALSE ,sheet = sheets[[5]])
 
-meta <- map(meta, clean_names)
+meta_list <- map(meta_list, clean_names)
 
 # set up menus
 # area
-areas <- meta[[3]] %>% 
+areas <- meta_list[[3]] %>% 
   rename(area = description)
 
 area_vec <- areas$code
@@ -66,32 +66,43 @@ country_menu <- area_vec[!(area_vec %in% c(world_menu, region_menu))]
 area_menu <- c(world_menu, region_menu, country_menu)
 
 # concept
-concepts <- meta[[4]] %>%
-  dplyr::select(code, description)
+concepts <- meta_list[[4]] %>%
+  select(code, description)
+
+all_not_na <- function(a_menu) {
+  weo_df %>% 
+    filter(ref_area %in% a_menu) %>% 
+    group_by(concept) %>% 
+    summarize(na_all = all(is.na(value))) %>% 
+    filter(na_all == FALSE)
+}
 
 level1 <- weo_df %>%
-  dplyr::count(concept) %>%
-  dplyr::filter(n > 1000)
+  count(concept) %>%
+  filter(n > 1000)
 
 concept1 <- concepts %>%
-  dplyr::semi_join(level1, by = c("code" = "concept"))
+  semi_join(level1, by = c(code = "concept")) %>% 
+  semi_join(all_not_na(area_menu), by = c(code = "concept"))
 
 concept1_menu <- split(concept1$code, concept1$description)
 
 region_only <- weo_df %>%
-  dplyr::filter(!is.na(value)) %>%
-  dplyr::filter(ref_area %in% region_menu) %>%
-  dplyr::semi_join(level1, by = "concept") %>%
-  dplyr::distinct(concept)
+  filter(!is.na(value)) %>%
+  filter(ref_area %in% region_menu) %>%
+  semi_join(level1, by = "concept") %>%
+  distinct(concept)
 
 concept2 <- concepts %>%
-  dplyr::semi_join(region_only, by = c("code" = "concept"))
+  semi_join(region_only, by = c(code = "concept")) %>% 
+  semi_join(all_not_na(region_menu), by = c(code = "concept"))
 
 concept2_menu <- split(concept2$code, concept2$description)
 
 concept3 <- concepts %>%
-  dplyr::anti_join(level1, by = c("code" = "concept")) %>% 
-  dplyr::anti_join(region_only, by = c("code" = "concept"))
+  anti_join(level1, by = c(code = "concept")) %>% 
+  anti_join(region_only, by = c(code = "concept")) %>% 
+  semi_join(all_not_na(world_menu), by = c(code = "concept"))
 
 concept3_menu <- split(concept3$code, concept3$description)
 
@@ -99,12 +110,12 @@ concept_vec <- concepts$code
 names(concept_vec) <- concepts$description
 
 # unit
-units <- meta[[5]]$x1
-names(units) <- meta[[5]]$x2
+units <- meta_list[[5]]$x1
+names(units) <- meta_list[[5]]$x2
 
 # scale
-scales <- meta[[6]]$value
-names(scales) <- meta[[6]]$description
+scales <- meta_list[[6]]$value
+names(scales) <- meta_list[[6]]$description
 names(scales)[3:4] <- ""
 
 # make a list
@@ -131,6 +142,6 @@ meta <- list(
 )
 
 # save
-usethis::use_data(data_2104, menu, meta)
+usethis::use_data(data_2104, menu, meta, overwrite = TRUE)
 
 
