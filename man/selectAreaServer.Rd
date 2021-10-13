@@ -25,6 +25,6 @@ selectArea module server
 }
 \examples{
 \dontrun{
-selectAreaServer("area", data_2014, data_2010_cut, "2104", "2010")
+selectAreaServer("area", data_2110, data_2104_cut, "2110", "2104")
 }
 }

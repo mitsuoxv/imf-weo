@@ -11,7 +11,7 @@
 #' @examples
 #' \dontrun{
 #' output_data(input$previous, chart_data(), chart_data_prev(),
-#' "2104", "2010")
+#' "2110", "2104")
 #' }
 output_data <- function(prev, df, df_prev, name_current, name_prev) {
   if (prev == "Yes") {

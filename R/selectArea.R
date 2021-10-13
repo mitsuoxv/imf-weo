@@ -56,12 +56,12 @@ selectAreaUI <- function(id, a_menu, c_menu) {
       ),
       
       # Toggle add previous forecast or not
-      radioButtons(NS(id, "previous"), "Add October 2020 forecast?", c("Yes", "No"),
+      radioButtons(NS(id, "previous"), "Add April 2021 forecast?", c("Yes", "No"),
                    selected = "No"),
     
       # Show source and Shiny app creator
       a(
-        href = "https://www.imf.org/en/Publications/SPROLLs/world-economic-outlook-databases#sort=%40imfdate%20descending",
+        href = "https://www.imf.org/en/Publications/WEO/weo-database/2021/October",
         "Source: IMF"
       ),
       br(),
@@ -98,7 +98,7 @@ selectAreaUI <- function(id, a_menu, c_menu) {
 #'
 #' @examples
 #' \dontrun{
-#' selectAreaServer("area", data_2014, data_2010_cut, "2104", "2010")
+#' selectAreaServer("area", data_2110, data_2104_cut, "2110", "2104")
 #' }
 selectAreaServer <- function(id, data, data_prev, 
                              name_current, name_prev) {
