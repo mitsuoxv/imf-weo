@@ -17,7 +17,7 @@
 #' }
 mainApp <- function(data_current, data_prev, name_current, name_prev) {
   # Define UI for application
-  ui <- navbarPage("IMF World Economic Outlook, October 2021",
+  ui <- navbarPage("IMF World Economic Outlook, April 2022",
   
     tags$head(includeHTML(("google-analytics.html"))),
     selected = "By area",
