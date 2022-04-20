@@ -4,7 +4,7 @@ library(janitor)
 
 # Bulk download from IMF World Economic Outlook Database
 # https://www.imf.org/en/Publications/WEO/weo-database/2021/October
-sdmx_file <- "downloads/WEO_PUB_OCT2021.xml"
+sdmx_file <- "downloads/WEO_PUB_APR2022.xml"
 
 sdmx <- rsdmx::readSDMX(sdmx_file, isURL = FALSE)
 
@@ -33,7 +33,7 @@ weo_df <- weo_df %>%
 
 # Download meta data
 # https://www.imf.org/en/Publications/WEO/weo-database/2021/October
-meta_file <- "downloads/WEOOct2021-SDMX-DSD.xlsx"
+meta_file <- "downloads/WEOApr2022-SDMX-DSD.xlsx"
 
 sheets <- readxl::excel_sheets(meta_file)
 
@@ -119,7 +119,7 @@ names(scales) <- meta_list[[6]]$description
 names(scales)[3:4] <- ""
 
 # make a list
-data_2110 <- weo_df
+data_2204 <- weo_df
 
 menu <- list(
   a_menu = list(
@@ -142,6 +142,6 @@ meta <- list(
 )
 
 # save
-usethis::use_data(data_2110, menu, meta, overwrite = TRUE)
+usethis::use_data(data_2204, menu, meta, overwrite = TRUE)
 
 
