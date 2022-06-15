@@ -4,7 +4,7 @@ Mitsuo Shiota
 2019-05-21
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/mitsuoxv/imf-weo/workflows/R-CMD-check/badge.svg)](https://github.com/mitsuoxv/imf-weo/actions)
+[![R-CMD-check](https://github.com/mitsuoxv/imf-weo/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mitsuoxv/imf-weo/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 Updated: 2021-04-09
