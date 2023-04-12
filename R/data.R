@@ -1,6 +1,6 @@
 #' Menu, current
 #'
-#' @source https://www.imf.org/en/Publications/WEO/weo-database/2022/October
+#' @source https://www.imf.org/en/Publications/WEO/weo-database/2023/April/download-entire-database
 #' @format A list.
 #' \describe{
 #' \item{a_menu}{
@@ -26,7 +26,7 @@
 
 #' Meta data, current
 #'
-#' @source https://www.imf.org/en/Publications/WEO/weo-database/2022/October
+#' @source https://www.imf.org/en/Publications/WEO/weo-database/2023/April/download-entire-database
 #' @format A list.
 #' \describe{
 #' \item{area}{
@@ -44,9 +44,9 @@
 
 #' IMF World Economic Outlook data, current
 #'
-#' Economic data published in October 2022.
+#' Economic data published in April 2023.
 #'
-#' @source https://www.imf.org/en/Publications/WEO/weo-database/2022/October
+#' @source https://www.imf.org/en/Publications/WEO/weo-database/2023/April/download-entire-database
 #' @format A tibble.
 #' \describe{
 #' \item{unit}{refer to meta unit}
@@ -59,13 +59,13 @@
 #' \item{year}{year like 1980}
 #' \item{value}{observed value}
 #' }
-"data_2210"
+"data_2304"
 
 #' IMF World Economic Outlook data, previous
 #'
-#' Economic data published in April 2022. Cut to since 2019 only.
+#' Economic data published in October 2022. Cut to since 2019 only.
 #'
-#' @source https://www.imf.org/en/Publications/WEO/weo-database/2022/April
+#' @source https://www.imf.org/en/Publications/WEO/weo-database/2022/October/download-entire-database
 #' @format A tibble.
 #' \describe{
 #' \item{unit}{refer to meta unit}
@@ -78,4 +78,4 @@
 #' \item{year}{year like 1980}
 #' \item{value}{observed value}
 #' }
-"data_2204_cut"
+"data_2210_cut"

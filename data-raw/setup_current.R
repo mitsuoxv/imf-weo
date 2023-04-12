@@ -3,8 +3,8 @@ library(tidyverse)
 library(janitor)
 
 # Bulk download from IMF World Economic Outlook Database
-# https://www.imf.org/en/Publications/WEO/weo-database/2022/October/
-sdmx_file <- "downloads/WEO_PUB_OCT2022.xml"
+# https://www.imf.org/en/Publications/WEO/weo-database/2023/April/download-entire-database
+sdmx_file <- "downloads/WEO_PUB_APR2023.xml"
 
 sdmx <- rsdmx::readSDMX(sdmx_file, isURL = FALSE)
 
@@ -26,14 +26,14 @@ weo_df <- type_convert(weo_df)
 
 weo_df <- weo_df %>% 
   mutate(
-    lastactualdate = parse_integer(lastactualdate, na = c("", "NA", "NULL", "0")),
+#    lastactualdate = parse_integer(lastactualdate, na = c("", "NA", "NULL", "0")),
     year = as.integer(year),
     value = parse_number(value, na = c("", "NA", "n/a", "--"))
     )
 
 # Download meta data
-# https://www.imf.org/en/Publications/WEO/weo-database/2022/October/
-meta_file <- "downloads/weooct2022-sdmx-dsd.xlsx"
+# https://www.imf.org/en/Publications/WEO/weo-database/2023/April/download-entire-database
+meta_file <- "downloads/weoapr2023-sdmx-dsd.xlsx"
 
 sheets <- readxl::excel_sheets(meta_file)
 
@@ -119,8 +119,8 @@ names(scales) <- meta_list[[6]]$description
 names(scales)[3:4] <- ""
 
 # make a list
-data_2210 <- weo_df %>% 
-  replace_na(list(scale = 1)) # avoid NAs in scale in 2210
+data_2304 <- weo_df %>% 
+  replace_na(list(scale = 1)) # avoid NAs in scale in 2304
 
 menu <- list(
   a_menu = list(
@@ -143,6 +143,6 @@ meta <- list(
 )
 
 # save
-usethis::use_data(data_2210, menu, meta, overwrite = TRUE)
+usethis::use_data(data_2304, menu, meta, overwrite = TRUE)
 
 

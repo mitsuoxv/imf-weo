@@ -50,13 +50,13 @@ selectAreaUI <- function(id, a_menu, c_menu) {
       sliderInput(NS(id, "year_range"),
                   label = h4("Select year range"),
                   min = 1980,
-                  max = 2027,
-                  value = c(1980, 2027),
+                  max = 2028,
+                  value = c(1980, 2028),
                   sep = ""
       ),
       
       # Toggle add previous forecast or not
-      radioButtons(NS(id, "previous"), "Add April 2022 forecast?", c("Yes", "No"),
+      radioButtons(NS(id, "previous"), "Add October 2022 forecast?", c("Yes", "No"),
                    selected = "No"),
     
       # Show source and Shiny app creator
@@ -127,7 +127,7 @@ selectAreaServer <- function(id, data, data_prev,
     }) %>% 
       bindCache(input$select_area, input$select_concept,
                 input$year_range)
-    
+  
     output$plot <- plotly::renderPlotly({
       draw_chart(input$previous,
                  chart_data(), chart_data_prev())
