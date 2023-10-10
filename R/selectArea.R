@@ -54,14 +54,14 @@ selectAreaUI <- function(id, a_menu, c_menu) {
                   value = c(1980, 2028),
                   sep = ""
       ),
-      
+  
       # Toggle add previous forecast or not
-      radioButtons(NS(id, "previous"), "Add October 2022 forecast?", c("Yes", "No"),
+      radioButtons(NS(id, "previous"), "Add April 2023 forecast?", c("Yes", "No"),
                    selected = "No"),
     
       # Show source and Shiny app creator
       a(
-        href = "https://www.imf.org/en/Publications/WEO/weo-database/2022/October",
+      href = "https://www.imf.org/en/Publications/WEO/weo-database/2023/October",
         "Source: IMF"
       ),
       br(),
