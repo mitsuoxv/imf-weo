@@ -1,6 +1,6 @@
 #' Menu, current
 #'
-#' @source https://www.imf.org/en/Publications/WEO/weo-database/2023/October
+#' @source https://www.imf.org/en/Publications/WEO/weo-database/2024/April
 #' @format A list.
 #' \describe{
 #' \item{a_menu}{
@@ -26,8 +26,7 @@
 
 #' Meta data, current
 #'
-#' @source https://www.imf.org/en/Publications/WEO/weo-database/2023/April/download-entire-database
-#' @format A list.
+#' @source https://www.imf.org/en/Publications/WEO/weo-database/2024/April
 #' \describe{
 #' \item{area}{
 #' @format A tibble.
@@ -44,7 +43,26 @@
 
 #' IMF World Economic Outlook data, current
 #'
-#' Economic data published in October 2023.
+#' Economic data published in April 2024.
+#'
+#' @source https://www.imf.org/en/Publications/WEO/weo-database/2024/April
+#' @format A tibble.
+#' \describe{
+#' \item{unit}{refer to meta unit}
+#' \item{concept}{refer to meta concept}
+#' \item{ref_area}{refer to meta area}
+#' \item{freq}{"A" for annual}
+#' \item{lastactualdate}{year like 2019}
+#' \item{scale}{refer to meta scale}
+#' \item{notes}{some notes}
+#' \item{year}{year like 1980}
+#' \item{value}{observed value}
+#' }
+"data_2404"
+
+#' IMF World Economic Outlook data, previous
+#'
+#' Economic data published in October 2023. Cut to since 2020 only.
 #'
 #' @source https://www.imf.org/en/Publications/WEO/weo-database/2023/October
 #' @format A tibble.
@@ -59,23 +77,4 @@
 #' \item{year}{year like 1980}
 #' \item{value}{observed value}
 #' }
-"data_2310"
-
-#' IMF World Economic Outlook data, previous
-#'
-#' Economic data published in April 2023. Cut to since 2019 only.
-#'
-#' @source https://www.imf.org/en/Publications/WEO/weo-database/2023/April
-#' @format A tibble.
-#' \describe{
-#' \item{unit}{refer to meta unit}
-#' \item{concept}{refer to meta concept}
-#' \item{ref_area}{refer to meta area}
-#' \item{freq}{"A" for annual}
-#' \item{lastactualdate}{year like 2019}
-#' \item{scale}{refer to meta scale}
-#' \item{notes}{some notes}
-#' \item{year}{year like 1980}
-#' \item{value}{observed value}
-#' }
-"data_2304_cut"
+"data_2310_cut"

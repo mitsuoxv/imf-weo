@@ -50,18 +50,18 @@ selectAreaUI <- function(id, a_menu, c_menu) {
       sliderInput(NS(id, "year_range"),
                   label = h4("Select year range"),
                   min = 1980,
-                  max = 2028,
-                  value = c(1980, 2028),
+                  max = 2029,
+                  value = c(1980, 2029),
                   sep = ""
       ),
-  
+
       # Toggle add previous forecast or not
-      radioButtons(NS(id, "previous"), "Add April 2023 forecast?", c("Yes", "No"),
+      radioButtons(NS(id, "previous"), "Add October 2023 forecast?", c("Yes", "No"),
                    selected = "No"),
     
       # Show source and Shiny app creator
       a(
-      href = "https://www.imf.org/en/Publications/WEO/weo-database/2023/October",
+      href = "https://www.imf.org/en/Publications/WEO/weo-database/2024/April",
         "Source: IMF"
       ),
       br(),

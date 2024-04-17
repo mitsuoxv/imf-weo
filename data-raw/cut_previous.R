@@ -1,8 +1,8 @@
 library(tidyverse)
 
-load("data-old/data_2304.rda")
+load("data-old/data_2310.rda")
 
-data_2304_cut <- data_2304 %>% 
-  filter(year >= 2019)
+data_2310_cut <- data_2310 %>% 
+  filter(year >= 2020)
 
-usethis::use_data(data_2304_cut)
+usethis::use_data(data_2310_cut)
