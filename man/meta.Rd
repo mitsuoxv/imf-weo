@@ -5,6 +5,10 @@
 \alias{meta}
 \title{Meta data, current}
 \format{
+A list.
+\describe{
+\item{area}{
+
 A tibble.
 \describe{
 \item{code}{"111"}
@@ -18,8 +22,6 @@ A tibble.
 }
 \source{
 https://www.imf.org/en/Publications/WEO/weo-database/2024/April
-\describe{
-\item{area}{
 }
 \usage{
 meta

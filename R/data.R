@@ -27,6 +27,7 @@
 #' Meta data, current
 #'
 #' @source https://www.imf.org/en/Publications/WEO/weo-database/2024/April
+#' @format A list.
 #' \describe{
 #' \item{area}{
 #' @format A tibble.
