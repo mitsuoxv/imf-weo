@@ -3,8 +3,8 @@ library(tidyverse)
 library(janitor)
 
 # Bulk download from IMF World Economic Outlook Database
-# https://www.imf.org/en/Publications/WEO/weo-database/2024/October/download-entire-database
-sdmx_file <- "downloads/WEO_PUB_OCT2024.xml"
+# https://www.imf.org/en/Publications/WEO/weo-database/2025/april/download-entire-database
+sdmx_file <- "downloads/xmlfile_APR2025.xml"
 
 sdmx <- rsdmx::readSDMX(sdmx_file, isURL = FALSE)
 
@@ -32,8 +32,8 @@ weo_df <- weo_df %>%
     )
 
 # Download meta data
-# https://www.imf.org/en/Publications/WEO/weo-database/2024/October/download-entire-database
-meta_file <- "downloads/weopub-dsd-oct2024.xlsx"
+# https://www.imf.org/en/Publications/WEO/weo-database/2025/april/download-entire-database
+meta_file <- "downloads/WEOPUB_DSD_APR2025.xlsx"
 
 sheets <- readxl::excel_sheets(meta_file)
 
@@ -50,10 +50,10 @@ meta_list <- map(meta_list, clean_names)
 # set up menus
 # area
 areas <- meta_list[[3]] %>% 
-  slice(-1) %>% 
+#  slice(-1) %>% 
   rename(
-    code = x1,
-    area = reference_area
+#    code = x1,
+    area = description
     )
 
 area_vec <- areas$code
@@ -123,8 +123,8 @@ names(scales) <- meta_list[[6]]$description
 names(scales)[3:4] <- ""
 
 # make a list
-data_2410 <- weo_df %>% 
-  replace_na(list(scale = 1)) # avoid NAs in scale in 2410
+data_2504 <- weo_df %>% 
+  replace_na(list(scale = 1)) # avoid NAs in scale, though no NAs in 2504
 
 menu <- list(
   a_menu = list(
@@ -147,6 +147,6 @@ meta <- list(
 )
 
 # save
-usethis::use_data(data_2410, menu, meta, overwrite = TRUE)
+usethis::use_data(data_2504, menu, meta, overwrite = TRUE)
 
 

@@ -21,7 +21,7 @@ A tibble.
 }
 }
 \source{
-https://www.imf.org/en/Publications/WEO/weo-database/2024/October
+https://www.imf.org/en/Publications/WEO/weo-database/2025/april/download-entire-database
 }
 \usage{
 meta

@@ -1,6 +1,6 @@
 #' Menu, current
 #'
-#' @source https://www.imf.org/en/Publications/WEO/weo-database/2024/April
+#' @source https://www.imf.org/en/Publications/WEO/weo-database/2025/april/download-entire-database
 #' @format A list.
 #' \describe{
 #' \item{a_menu}{
@@ -26,7 +26,7 @@
 
 #' Meta data, current
 #'
-#' @source https://www.imf.org/en/Publications/WEO/weo-database/2024/October
+#' @source https://www.imf.org/en/Publications/WEO/weo-database/2025/april/download-entire-database
 #' @format A list.
 #' \describe{
 #' \item{area}{
@@ -44,7 +44,26 @@
 
 #' IMF World Economic Outlook data, current
 #'
-#' Economic data published in April 2024.
+#' Economic data published in April 2025.
+#'
+#' @source https://www.imf.org/en/Publications/WEO/weo-database/2025/april/download-entire-database
+#' @format A tibble.
+#' \describe{
+#' \item{unit}{refer to meta unit}
+#' \item{concept}{refer to meta concept}
+#' \item{ref_area}{refer to meta area}
+#' \item{freq}{"A" for annual}
+#' \item{lastactualdate}{year like 2019}
+#' \item{scale}{refer to meta scale}
+#' \item{notes}{some notes}
+#' \item{year}{year like 1980}
+#' \item{value}{observed value}
+#' }
+"data_2504"
+
+#' IMF World Economic Outlook data, previous
+#'
+#' Economic data published in October 2024. Cut to since 2021 only.
 #'
 #' @source https://www.imf.org/en/Publications/WEO/weo-database/2024/October
 #' @format A tibble.
@@ -59,23 +78,4 @@
 #' \item{year}{year like 1980}
 #' \item{value}{observed value}
 #' }
-"data_2410"
-
-#' IMF World Economic Outlook data, previous
-#'
-#' Economic data published in October 2023. Cut to since 2020 only.
-#'
-#' @source https://www.imf.org/en/Publications/WEO/weo-database/2024/April
-#' @format A tibble.
-#' \describe{
-#' \item{unit}{refer to meta unit}
-#' \item{concept}{refer to meta concept}
-#' \item{ref_area}{refer to meta area}
-#' \item{freq}{"A" for annual}
-#' \item{lastactualdate}{year like 2019}
-#' \item{scale}{refer to meta scale}
-#' \item{notes}{some notes}
-#' \item{year}{year like 1980}
-#' \item{value}{observed value}
-#' }
-"data_2404_cut"
+"data_2410_cut"

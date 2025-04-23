@@ -7,8 +7,8 @@ R/main.R
 R/output.R
 R/selectArea.R
 R/utils-pipe.R
-data/data_2404_cut.rda
-data/data_2410.rda
+data/data_2410_cut.rda
+data/data_2504.rda
 data/menu.rda
 data/meta.rda
 google-analytics.html
