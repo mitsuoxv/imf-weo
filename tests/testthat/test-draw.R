@@ -1,6 +1,6 @@
 test_that("print_lastactual creates expected HTML", {
   df <- tibble::tibble(
-    ref_area = c(rep("112", 3), rep("122", 2))
+    ref_area = c(rep("GBR", 3), rep("AUT", 2))
   )
   
   df$lastactualdate <- c(rep(2020, 3), rep(2019, 2))
@@ -18,7 +18,7 @@ test_that("print_lastactual creates expected HTML", {
 
 test_that("print_note creates expected HTML", {
   df <- tibble::tibble(
-    ref_area = c(rep("112", 3), rep("122", 2))
+    ref_area = c(rep("GBR", 3), rep("AUT", 2))
   )
   
   df$notes <- c(rep("See notes for: xxx", 3), rep("See notes for: xxx", 2))

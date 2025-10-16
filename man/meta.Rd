@@ -11,7 +11,7 @@ A list.
 
 A tibble.
 \describe{
-\item{code}{"111"}
+\item{code}{"USA"}
 \item{area}{"United States"}
 }
 }
@@ -21,7 +21,7 @@ A tibble.
 }
 }
 \source{
-https://www.imf.org/en/Publications/WEO/weo-database/2025/april/download-entire-database
+https://data.imf.org/en/datasets/IMF.RES:WEO
 }
 \usage{
 meta

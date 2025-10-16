@@ -1,14 +1,14 @@
 test_that("output_data prepares appropriate download data", {
   name_current <- "2110"
   df <- tibble::tibble(
-    ref_area = c(rep("112", 3), rep("122", 3)),
+    ref_area = c(rep("GBR", 3), rep("AUT", 3)),
     year = rep(1980:1982, 2),
     value = c(11:13, 31:33)
   )
   
   name_prev <- "2104"
   df_prev <- tibble::tibble(
-    ref_area = c(rep("112", 3), rep("122", 3)),
+    ref_area = c(rep("GBR", 3), rep("AUT", 3)),
     year = rep(1980:1982, 2),
     value = c(1:3, 21:23)
   )

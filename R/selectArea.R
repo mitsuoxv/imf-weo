@@ -19,18 +19,18 @@ selectAreaUI <- function(id, a_menu, c_menu) {
       if (id == "region") {
         selectInput(NS(id, "select_area"),
                     label = h4("Select regions (add/remove)"),
-                    choices = a_menu, selected = c("200", "205", "505"),
+                    choices = a_menu, selected = c("G200", "G205", "G505"),
                     multiple = TRUE
         )
       } else if (id == "commodity") {
         selectInput(NS(id, "select_area"),
                     label = h4("World only"),
-                    choices = a_menu, selected = "001"
+                    choices = a_menu, selected = "G001"
         )
       } else if (id == "area") {
         selectInput(NS(id, "select_area"),
                     label = h4("Select areas (add/remove)"),
-                    choices = a_menu, selected = c("158", "111"),
+                    choices = a_menu, selected = c("JPN", "USA"),
                     multiple = TRUE
         )
       }
@@ -56,12 +56,12 @@ selectAreaUI <- function(id, a_menu, c_menu) {
       ),
 
       # Toggle add previous forecast or not
-      radioButtons(NS(id, "previous"), "Add October 2024 forecast?", c("Yes", "No"),
+      radioButtons(NS(id, "previous"), "Add April 2025 forecast?", c("Yes", "No"),
                    selected = "No"),
     
       # Show source and Shiny app creator
       a(
-      href = "https://www.imf.org/en/Publications/WEO/weo-database/2025/april",
+      href = "https://data.imf.org/en/datasets/IMF.RES:WEO",
         "Source: IMF"
       ),
       br(),
