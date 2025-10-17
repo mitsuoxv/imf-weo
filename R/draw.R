@@ -17,7 +17,7 @@ draw_chart <- function(prev, df, df_prev) {
   p <- df %>% 
     dplyr::left_join(meta$area, by = c("ref_area" = "code")) %>% 
     ggplot2::ggplot(ggplot2::aes(year, value, color = area)) +
-    ggplot2::geom_hline(yintercept = 0, size = 1, color = "white") +
+    ggplot2::geom_hline(yintercept = 0, linewidth = 1, color = "white") +
     ggplot2::geom_line() +
     ggplot2::labs(
       title = names(meta$concept)[meta$concept == df$concept[1]][1],
@@ -65,6 +65,33 @@ print_lastactual <- function(df) {
   } else {
     paste0("<p>", paste0(
       paste0("Last actual ", df$area, ": ", df$lastactualdate),
+      collapse = "<br>"), "</p>")
+  }
+}
+
+
+#' Print base year
+#' 
+#' Print base year.
+#'
+#' @param df A tibble.
+#'
+#' @return A character vector of length 1.
+#'
+#' @examples
+#' \dontrun{
+#' print_baseyear(df)
+#' }
+print_baseyear <- function(df) {
+  df <- df %>%
+    dplyr::left_join(meta$area, by = c("ref_area" = "code")) %>% 
+    dplyr::distinct(ref_area, area, base_year)
+  
+  if (all(is.na(df$base_year))) {
+    NULL
+  } else {
+    paste0("<p>", paste0(
+      paste0("Base year ", df$area, ": ", df$base_year),
       collapse = "<br>"), "</p>")
   }
 }

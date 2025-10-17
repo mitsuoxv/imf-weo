@@ -76,7 +76,8 @@ selectAreaUI <- function(id, a_menu, c_menu) {
       plotly::plotlyOutput(NS(id, "plot")),
       fluidRow(
         column(4,
-               htmlOutput(NS(id, "lastactual"))),
+               htmlOutput(NS(id, "lastactual")),
+               htmlOutput(NS(id, "baseyear"))),
         column(4,
                htmlOutput(NS(id, "notes"))),
         column(4,
@@ -136,6 +137,11 @@ selectAreaServer <- function(id, data, data_prev,
     output$lastactual <- renderText({
       chart_data() %>%
         print_lastactual()
+    })
+
+    output$baseyear <- renderText({
+      chart_data() %>%
+        print_baseyear()
     })
 
     output$notes <- renderText({
