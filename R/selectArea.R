@@ -50,13 +50,13 @@ selectAreaUI <- function(id, a_menu, c_menu) {
       sliderInput(NS(id, "year_range"),
                   label = h4("Select year range"),
                   min = 1980,
-                  max = 2030,
-                  value = c(1980, 2030),
+                  max = 2031,
+                  value = c(1980, 2031),
                   sep = ""
       ),
 
       # Toggle add previous forecast or not
-      radioButtons(NS(id, "previous"), "Add April 2025 forecast?", c("Yes", "No"),
+      radioButtons(NS(id, "previous"), "Add October 2025 forecast?", c("Yes", "No"),
                    selected = "No"),
     
       # Show source and Shiny app creator

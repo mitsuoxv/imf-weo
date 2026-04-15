@@ -9,7 +9,7 @@ library(janitor)
 # Country, Indicator, Frequency, Scale, Unit of Measure, Methodology notes,
 # Latest Actual Annual Data, Base year
 
-csv_file <- "downloads/dataset_2025-10-16T05_59_25.533931356Z_DEFAULT_INTEGRATION_IMF.RES_WEO_9.0.0.csv"
+csv_file <- "downloads/dataset_2026-04-15T04_21_22.166860960Z_DEFAULT_INTEGRATION_IMF.RES_WEO_9.0.0.csv"
 
 csv_raw <- read_csv(csv_file) |> 
   clean_names()
@@ -144,7 +144,7 @@ scales <- scale_df$scale_id
 names(scales) <- scale_df$scale
 
 # make a list
-data_2510 <- csv_df
+data_2604 <- csv_df
 
 menu <- list(
   a_menu = list(
@@ -167,42 +167,5 @@ meta <- list(
 )
 
 # save
-usethis::use_data(data_2510, menu, meta, overwrite = TRUE)
+usethis::use_data(data_2604, menu, meta, overwrite = TRUE)
 
-
-
-# Transition from 2504 to 2510
-# Download old meta data
-# https://www.imf.org/en/Publications/WEO/weo-database/2025/april/download-entire-database
-meta_file <- "downloads/WEOPUB_DSD_APR2025.xlsx"
-
-sheets <- readxl::excel_sheets(meta_file)
-
-meta_list <- vector("list", length(sheets))
-
-for (i in seq_along(sheets)) {
-  meta_list[[i]] <- readxl::read_excel(meta_file, skip = 7, sheet = sheets[[i]])
-}
-
-meta_list[[3]] <- meta_list[[3]] |> 
-  clean_names()
-
-# area
-meta_list[[3]] |> 
-  arrange(description) |> View()
-
-area_df |> 
-  arrange(area) |> View() # LIE
-
-old_new_ref_area_df <- bind_cols(
-  meta_list[[3]] |> 
-    arrange(description) |> 
-    rename(ref_area = code),
-  area_df |> 
-    arrange(area) |> 
-    filter(code != "LIE") |> 
-    rename(ref_area_new = code)
-) |> 
-  select(ref_area, ref_area_new)
-
-write_csv(old_new_ref_area_df, file = "data-raw/old_new_ref_area.csv")

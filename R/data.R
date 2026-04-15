@@ -60,13 +60,13 @@
 #' \item{year}{year like 1980}
 #' \item{value}{observed value}
 #' }
-"data_2510"
+"data_2604"
 
 #' IMF World Economic Outlook data, previous
 #'
-#' Economic data published in April 2025. Cut to since 2021 only.
+#' Economic data published in October 2025. Cut to since 2022 only.
 #'
-#' @source https://www.imf.org/en/Publications/WEO/weo-database/2025/april/download-entire-database
+#' @source https://data.imf.org/en/datasets/IMF.RES:WEO
 #' @format A tibble.
 #' \describe{
 #' \item{unit}{refer to meta unit}
@@ -79,4 +79,4 @@
 #' \item{year}{year like 1980}
 #' \item{value}{observed value}
 #' }
-"data_2504_cut"
+"data_2510_cut"
