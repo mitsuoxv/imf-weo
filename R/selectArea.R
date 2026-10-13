@@ -56,7 +56,7 @@ selectAreaUI <- function(id, a_menu, c_menu) {
       ),
 
       # Toggle add previous forecast or not
-      radioButtons(NS(id, "previous"), "Add October 2025 forecast?", c("Yes", "No"),
+      radioButtons(NS(id, "previous"), "Add April 2026 forecast?", c("Yes", "No"),
                    selected = "No"),
     
       # Show source and Shiny app creator

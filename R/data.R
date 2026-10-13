@@ -60,7 +60,7 @@
 #' \item{year}{year like 1980}
 #' \item{value}{observed value}
 #' }
-"data_2604"
+"data_2610"
 
 #' IMF World Economic Outlook data, previous
 #'
@@ -79,4 +79,4 @@
 #' \item{year}{year like 1980}
 #' \item{value}{observed value}
 #' }
-"data_2510_cut"
+"data_2604_cut"

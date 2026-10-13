@@ -9,7 +9,7 @@ library(janitor)
 # Country, Indicator, Frequency, Scale, Unit of Measure, Methodology notes,
 # Latest Actual Annual Data, Base year
 
-csv_file <- "downloads/dataset_2026-04-15T04_21_22.166860960Z_DEFAULT_INTEGRATION_IMF.RES_WEO_9.0.0.csv"
+csv_file <- "downloads/dataset_2026-10-13T07_36_12.231743083Z_DEFAULT_INTEGRATION_IMF.RES_WEO_9.0.0.csv"
 
 csv_raw <- read_csv(csv_file) |> 
   clean_names()
@@ -144,7 +144,7 @@ scales <- scale_df$scale_id
 names(scales) <- scale_df$scale
 
 # make a list
-data_2604 <- csv_df
+data_2610 <- csv_df
 
 menu <- list(
   a_menu = list(
@@ -167,5 +167,5 @@ meta <- list(
 )
 
 # save
-usethis::use_data(data_2604, menu, meta, overwrite = TRUE)
+usethis::use_data(data_2610, menu, meta, overwrite = TRUE)
 
