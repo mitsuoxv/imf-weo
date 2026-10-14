@@ -93,8 +93,8 @@ concept_df <- csv_raw |>
   arrange(indicator_id)
 
 level1 <- csv_df  |> 
-  count(concept) |>
-  filter(n > 1000)
+  count(concept, sort = TRUE) |> 
+  filter(n > 200)
 
 concept1 <- concept_df |>
   semi_join(level1, by = c(indicator_id = "concept"))
